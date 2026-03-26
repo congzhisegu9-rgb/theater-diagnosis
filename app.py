@@ -1,5 +1,43 @@
 import streamlit as st
+import base64
 
+# ===== 背景画像読み込み =====
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+img = get_base64("prism.jpg")
+
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpg;base64,{img}");
+        background-size: cover;
+        background-position: center;
+    }}
+
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: -1;
+    }}
+
+    h1, h2, h3, p {{
+        color: white;
+        text-align: center;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# ===== データ =====
 SECTIONS = ["舞台", "音響", "照明", "映像", "衣装", "小道具", "制作", "Web", "役者"]
 
 QUESTIONS = [
@@ -23,25 +61,40 @@ QUESTIONS = [
     }
 ]
 
-st.title("🎭 セクション適性診断")
+# ===== 状態管理 =====
+if "q_index" not in st.session_state:
+    st.session_state.q_index = 0
+    st.session_state.scores = {s: 0 for s in SECTIONS}
 
-answers = []
+# ===== UI =====
+st.image("prism.jpg", width=200)
+st.title("セクション適性診断")
 
-for i, q in enumerate(QUESTIONS):
-    choice = st.radio(q["question"], [c["text"] for c in q["choices"]], key=i)
-    answers.append(choice)
+# ===== 質問 =====
+if st.session_state.q_index < len(QUESTIONS):
+    q = QUESTIONS[st.session_state.q_index]
 
-if st.button("診断する"):
-    scores = {section: 0 for section in SECTIONS}
+    st.subheader(f"Q{st.session_state.q_index+1}. {q['question']}")
 
-    for i, q in enumerate(QUESTIONS):
-        selected_text = answers[i]
+    choice = st.radio("", [c["text"] for c in q["choices"]])
+
+    if st.button("次へ", use_container_width=True):
         for c in q["choices"]:
-            if c["text"] == selected_text:
+            if c["text"] == choice:
                 for sec, pt in c["scores"].items():
-                    scores[sec] += pt
+                    st.session_state.scores[sec] += pt
 
-    result = max(scores, key=scores.get)
+        st.session_state.q_index += 1
+        st.rerun()
+
+# ===== 結果 =====
+else:
+    result = max(st.session_state.scores, key=st.session_state.scores.get)
 
     st.header(f"あなたにおすすめ 👉 {result}")
-    st.write(scores)
+    st.write(st.session_state.scores)
+
+    if st.button("もう一度"):
+        st.session_state.q_index = 0
+        st.session_state.scores = {s: 0 for s in SECTIONS}
+        st.rerun()
