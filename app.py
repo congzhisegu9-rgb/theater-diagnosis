@@ -67,7 +67,7 @@ if "q_index" not in st.session_state:
     st.session_state.scores = {s: 0 for s in SECTIONS}
 
 # ===== UI =====
-st.image("prism.jpg", width=200)
+st.image("prism-logo.jpg", width=200)
 st.title("セクション適性診断")
 
 # ===== 質問 =====
