@@ -133,7 +133,7 @@ if not st.session_state.started:
 st.markdown(
     """
     <div class="card">
-        <h1>🎭 セクション適性診断</h1>
+        <h1>セクション適性診断</h1>
     </div>
     """,
     unsafe_allow_html=True
