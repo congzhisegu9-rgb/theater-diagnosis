@@ -89,22 +89,26 @@ st.title("セクション適性診断")
 if st.session_state.q_index < len(QUESTIONS):
     q = QUESTIONS[st.session_state.q_index]
 
-    st.markdown('<div class="card">', unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    st.subheader(f"Q{st.session_state.q_index+1}. {q['question']}")
-    choice = st.radio("", [c["text"] for c in q["choices"]])
+        st.markdown(
+            f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>",
+            unsafe_allow_html=True
+        )
 
-    if st.button("次へ", use_container_width=True):
-        for c in q["choices"]:
-            if c["text"] == choice:
-                for sec, pt in c["scores"].items():
-                    st.session_state.scores[sec] += pt
+        choice = st.radio("", [c["text"] for c in q["choices"]])
 
-        st.session_state.q_index += 1
-        st.rerun()
+        if st.button("次へ", use_container_width=True):
+            for c in q["choices"]:
+                if c["text"] == choice:
+                    for sec, pt in c["scores"].items():
+                        st.session_state.scores[sec] += pt
 
-    st.markdown('</div>', unsafe_allow_html=True)
+            st.session_state.q_index += 1
+            st.rerun()
 
+        st.markdown('</div>', unsafe_allow_html=True)
 # ===== 結果 =====
 else:
     result = max(st.session_state.scores, key=st.session_state.scores.get)
