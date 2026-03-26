@@ -1,4 +1,4 @@
-import streamlit as st
+   import streamlit as st
 import base64
 
 # ===== 背景画像読み込み =====
@@ -8,6 +8,7 @@ def get_base64(file_path):
 
 img = get_base64("prism-logo.jpg")
 
+# ===== デザイン =====
 st.markdown(
     f"""
     <style>
@@ -30,6 +31,20 @@ st.markdown(
 
     h1, h2, h3, p {{
         color: white;
+        text-align: center;
+    }}
+
+    .card {{
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }}
+
+    .card h2, .card h3, .card p {{
+        color: black;
         text-align: center;
     }}
     </style>
@@ -74,8 +89,9 @@ st.title("セクション適性診断")
 if st.session_state.q_index < len(QUESTIONS):
     q = QUESTIONS[st.session_state.q_index]
 
-    st.subheader(f"Q{st.session_state.q_index+1}. {q['question']}")
+    st.markdown('<div class="card">', unsafe_allow_html=True)
 
+    st.subheader(f"Q{st.session_state.q_index+1}. {q['question']}")
     choice = st.radio("", [c["text"] for c in q["choices"]])
 
     if st.button("次へ", use_container_width=True):
@@ -87,9 +103,13 @@ if st.session_state.q_index < len(QUESTIONS):
         st.session_state.q_index += 1
         st.rerun()
 
+    st.markdown('</div>', unsafe_allow_html=True)
+
 # ===== 結果 =====
 else:
     result = max(st.session_state.scores, key=st.session_state.scores.get)
+
+    st.markdown('<div class="card">', unsafe_allow_html=True)
 
     st.header(f"あなたにおすすめ 👉 {result}")
     st.write(st.session_state.scores)
@@ -98,3 +118,5 @@ else:
         st.session_state.q_index = 0
         st.session_state.scores = {s: 0 for s in SECTIONS}
         st.rerun()
+
+    st.markdown('</div>', unsafe_allow_html=True)
