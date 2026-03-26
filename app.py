@@ -28,16 +28,18 @@ st.markdown(
         background: rgba(0,0,0,0.5);
         z-index: -1;
     }}
-　　 /* ===== 質問カードを丸ごと囲う ===== */
-div[data-testid="stVerticalBlock"]:has(div.question-block) {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    border-radius: 20px;
-    max-width: 650px;
-    margin: 30px auto;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    animation: fadePage 0.6s ease;
-}
+
+    /* ===== 質問カードを丸ごと囲う ===== */
+    div[data-testid="stVerticalBlock"]:has(div.question-block) {{
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 650px;
+        margin: 30px auto;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        animation: fadePage 0.6s ease;
+    }}
+
     /* ===== アニメーション ===== */
     @keyframes fadePage {{
         from {{
