@@ -35,7 +35,15 @@ st.markdown(
         to {{ opacity: 1; transform: translateY(0); }}
     }}
 
-   
+    .card {{
+        background-color: rgba(255,255,255,0.9);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 650px;
+        margin: 30px auto;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        animation: fadePage 0.6s ease;
+    }}
 
     .card h1, .card h2, .card h3 {{
         color: black;
