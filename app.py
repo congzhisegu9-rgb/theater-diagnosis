@@ -1,4 +1,4 @@
-   import streamlit as st
+import streamlit as st
 import base64
 
 # ===== 背景画像読み込み =====
