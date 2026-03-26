@@ -8,7 +8,7 @@ def get_base64(file_path):
 
 img = get_base64("prism-logo.jpg")
 
-# ===== CSS（デザイン全部入り）=====
+# ===== CSS =====
 st.markdown(
     f"""
     <style>
@@ -29,24 +29,33 @@ st.markdown(
         z-index: -1;
     }}
 
-    h1, h2, h3, p {{
-        color: white;
-        text-align: center;
+    /* ===== アニメーション ===== */
+    @keyframes fadePage {{
+        from {{
+            opacity: 0;
+            transform: translateY(30px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateY(0);
+        }}
     }}
 
-    /* カード */
+    /* ===== カード共通 ===== */
     .card {{
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.9);
         padding: 30px;
         border-radius: 20px;
-        max-width: 600px;
-        margin: 50px auto;
+        max-width: 650px;
+        margin: 30px auto;
         box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        animation: fadeIn 0.6s ease;
+        animation: fadePage 0.6s ease;
     }}
 
-    .card h2, .card h3 {{
+    /* カード内文字は黒 */
+    .card h1, .card h2, .card h3, .card p {{
         color: black;
+        text-align: center;
     }}
 
     /* ラジオボタン */
@@ -62,22 +71,6 @@ st.markdown(
         background-color: rgba(0, 0, 0, 0.1);
         border-radius: 10px;
         cursor: pointer;
-    }}
-
-    /* アニメーション */
-    @keyframes fadeIn {{
-        from {{
-            opacity: 0;
-            transform: translateY(20px);
-        }}
-        to {{
-            opacity: 1;
-            transform: translateY(0);
-        }}
-    }}
-
-    div[data-testid="stRadio"] {{
-        animation: fadeIn 0.8s ease;
     }}
 
     /* ボタン */
@@ -122,9 +115,15 @@ if "q_index" not in st.session_state:
     st.session_state.q_index = 0
     st.session_state.scores = {s: 0 for s in SECTIONS}
 
-# ===== UI =====
-st.image("prism-logo.jpg", width=200)
-st.title("セクション適性診断")
+# ===== タイトルカード =====
+st.markdown(
+    """
+    <div class="card">
+        <h1>🎭 セクション適性診断</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # ===== 質問 =====
 if st.session_state.q_index < len(QUESTIONS):
