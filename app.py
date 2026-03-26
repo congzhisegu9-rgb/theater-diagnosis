@@ -89,15 +89,35 @@ st.title("セクション適性診断")
 if st.session_state.q_index < len(QUESTIONS):
     q = QUESTIONS[st.session_state.q_index]
 
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stVerticalBlock"] > div:has(div.card-inner) {
+            background-color: rgba(255,255,255,0.9);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 50px auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     with st.container():
-        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.markdown('<div class="card-inner">', unsafe_allow_html=True)
 
         st.markdown(
-            f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>",
+            f"<h3 style='color:black;text-align:center;'>Q{st.session_state.q_index+1}. {q['question']}</h3>",
             unsafe_allow_html=True
         )
 
-        choice = st.radio("", [c["text"] for c in q["choices"]])
+        choice = st.radio(
+            "",
+            [c["text"] for c in q["choices"]],
+            label_visibility="collapsed"
+        )
 
         if st.button("次へ", use_container_width=True):
             for c in q["choices"]:
