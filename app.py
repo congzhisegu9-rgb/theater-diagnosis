@@ -39,7 +39,7 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ===== タイトル（大きく） ===== */
+    /* ===== タイトル ===== */
     .title {{
         text-align: center;
         font-size: 42px;
@@ -75,10 +75,10 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン（大きく＆押しやすく） ===== */
+    /* ===== ボタン（最強版） ===== */
     div.stButton > button {{
         width: 100%;
-        height: 50px;
+        height: 56px;
 
         display: flex !important;
         align-items: center;
@@ -88,24 +88,26 @@ def set_bg(image_file):
         border: none !important;
         box-shadow: none !important;
 
-        font-size: 22px;
+        font-size: 26px;
+        font-weight: 700;
         color: #333;
 
         margin: 6px 0;
-        border-radius: 8px;
+        border-radius: 10px;
 
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
 
         transition: all 0.2s ease;
     }}
 
+    /* ホバー演出 */
     div.stButton > button:hover {{
         background: rgba(0,0,0,0.05) !important;
+        transform: scale(1.03);
     }}
 
     div.stButton.selected > button {{
         background: rgba(120,150,255,0.25) !important;
-        font-weight: 600;
     }}
 
     /* テキスト中央 */
