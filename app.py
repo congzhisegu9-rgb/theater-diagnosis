@@ -45,7 +45,7 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* カード */
+    /* 外側カード */
     .card {{
         background-color: rgba(255,255,255,0.95);
         padding: 35px;
@@ -54,6 +54,15 @@ def set_bg(image_file):
         box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         max-width: 600px;
         margin: 40px auto;
+    }}
+
+    /* 内側カード（質問＋選択肢） */
+    .question-box {{
+        background: rgba(255,255,255,0.85);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 15px;
+        border: 1px solid rgba(0,0,0,0.1);
     }}
 
     </style>
@@ -138,23 +147,22 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
+# ---------- 質問 ----------
 if q_index < len(questions):
     q, choices = questions[q_index]
 
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    # タイトル（カード内＆見やすく）
-    st.markdown("""
-    <h2 style='text-align:center; margin-bottom:10px;'>
-    🎭 セクション適性診断
-    </h2>
-    """, unsafe_allow_html=True)
-
+    st.markdown("<h2 style='text-align:center;'>🎭 セクション適性診断</h2>", unsafe_allow_html=True)
     st.caption(f"{q_index+1} / {len(questions)} 問")
 
-    st.subheader(f"Q{q_index+1}. {q}")
+    # 内側カード
+    st.markdown('<div class="question-box">', unsafe_allow_html=True)
 
+    st.subheader(f"Q{q_index+1}. {q}")
     answer = st.radio("", list(choices.keys()), key=q_index)
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if st.button("次へ"):
         for sec in choices[answer]:
@@ -166,6 +174,7 @@ if q_index < len(questions):
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+# ---------- 結果 ----------
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
