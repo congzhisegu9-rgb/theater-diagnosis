@@ -7,69 +7,45 @@ def set_bg(image_file):
         img = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
-    <style>
-    html, body, .stApp {{
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }}
+<style>
 
-    .stApp {{
-        background-image: url("data:image/png;base64,{img}");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }}
+/* 全体 */
+.block-container {{
+    max-width: 700px;  /* ←これで基準を統一 */
+}}
 
-    .stApp::before {{
-        content: "";
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.3);
-        z-index: -1;
-    }}
+/* カード */
+.card {{
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 20px;
+    margin: 40px auto;
+}}
 
-    .main, .block-container {{
-        background: transparent;
-    }}
+/* 質問ボックス */
+.question-box {{
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 15px;
+}}
 
-    header, footer {{
-        visibility: hidden;
-    }}
+/* ボタンを完全に横いっぱいにする */
+.stButton {{
+    width: 100%;
+}}
 
-    /* 外側カード */
-    .card {{
-        background: rgba(255,255,255,0.95);
-        padding: 30px;
-        border-radius: 20px;
-        max-width: 600px;
-        margin: 40px auto;
-    }}
+.stButton > button {{
+    width: 100% !important;
+    display: block;
+    height: 55px;
+    border-radius: 12px;
+    font-size: 16px;
+    margin: 6px 0;
+}}
 
-    /* 質問エリア */
-    .question-box {{
-        background: rgba(255,255,255,0.9);
-        padding: 20px;
-        border-radius: 15px;
-        margin-top: 15px;
-        border: 1px solid rgba(0,0,0,0.1);
-    }}
-
-    /* ボタンを横いっぱいに */
-    div.stButton > button {{
-        width: 100%;
-        height: 55px;
-        border-radius: 12px;
-        font-size: 16px;
-        margin: 6px 0;
-    }}
-
-    </style>
-    """, unsafe_allow_html=True)
-
-set_bg("prism-logo.png")
-
+</style>
+""", unsafe_allow_html=True)
 # ---------- 状態 ----------
 if "q_index" not in st.session_state:
     st.session_state.q_index = 0
@@ -119,23 +95,26 @@ if q_index < len(questions):
     st.markdown("## 🎭 セクション適性診断")
     st.caption(f"{q_index+1} / {len(questions)} 問")
 
-    # 👇 同一ボックス
+    # 👇 containerで完全に一体化
     with st.container():
         st.markdown('<div class="question-box">', unsafe_allow_html=True)
 
-        st.subheader(f"Q{q_index+1}. {q}")
+        st.markdown(f"### Q{q_index+1}. {q}")
 
+        # 👇 columnsで幅を固定（これが効く）
         for choice, secs in choices.items():
-            if st.button(choice, key=f"{q_index}_{choice}"):
-                st.session_state.history.append(secs)
-                for sec in secs:
-                    st.session_state.scores[sec] += 1
-                st.session_state.q_index += 1
-                st.rerun()
+            col = st.columns([1])[0]
+            with col:
+                if st.button(choice, key=f"{q_index}_{choice}"):
+                    st.session_state.history.append(secs)
+                    for sec in secs:
+                        st.session_state.scores[sec] += 1
+                    st.session_state.q_index += 1
+                    st.rerun()
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 戻る
+    # 戻るボタン
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
@@ -144,6 +123,7 @@ if q_index < len(questions):
             st.session_state.q_index -= 1
             st.rerun()
 
+    # 進捗バー
     st.progress((q_index + 1) / len(questions))
 
     st.markdown('</div>', unsafe_allow_html=True)
