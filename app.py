@@ -15,19 +15,6 @@ if "scores" not in st.session_state:
         "衣装":0,"小道具":0,"制作":0,"Web":0,"役者":0
     }
 
-# ===== タイプ定義 =====
-TYPES = {
-    "舞台":"現場職人タイプ",
-    "音響":"テクニカル職人タイプ",
-    "照明":"空間演出家タイプ",
-    "映像":"クリエイタータイプ",
-    "衣装":"デザイナータイプ",
-    "小道具":"クラフト職人タイプ",
-    "制作":"プロデューサータイプ",
-    "Web":"デジタル職人タイプ",
-    "役者":"表現者タイプ"
-}
-
 # ===== 背景画像 =====
 def get_base64(file_path):
     with open(file_path, "rb") as f:
@@ -42,6 +29,7 @@ st.markdown(f"""
 .stApp {{
     background-image: url("data:image/jpg;base64,{img}");
     background-size: cover;
+    background-position: center;
 }}
 
 .stApp::before {{
@@ -69,22 +57,20 @@ st.markdown(f"""
     text-align: center;
 }}
 
-/* 👇 質問＋選択肢を一体化 */
-.question-box {{
-    background: rgba(255,255,255,0.92);
+/* 👇質問＋選択肢まとめてカード化 */
+.question-card {{
+    background: rgba(255,255,255,0.95);
     padding: 30px;
     border-radius: 20px;
     max-width: 700px;
-    margin: 30px auto;
+    margin: 20px auto;
     box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     animation: fadeIn 0.5s;
 }}
 
-/* radioを中に溶け込ませる */
+/* radioの余白調整 */
 div[data-testid="stRadio"] {{
-    background: transparent !important;
-    padding: 0 !important;
-    box-shadow: none !important;
+    margin-top: 15px;
 }}
 
 div[data-testid="stRadio"] label {{
@@ -147,7 +133,7 @@ if st.session_state.q_index < len(QUESTIONS):
 
     q = QUESTIONS[st.session_state.q_index]
 
-    st.markdown('<div class="question-box">', unsafe_allow_html=True)
+    st.markdown('<div class="question-card">', unsafe_allow_html=True)
 
     st.markdown(f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>", unsafe_allow_html=True)
 
@@ -185,9 +171,9 @@ else:
     <div class="card">
     <h2>
     あなたに向いているのは…<br><br>
-    <b>{top1}</b>（{TYPES[top1]}）<br><br>
+    <b>{top1}セクションタイプ</b><br><br>
     ＆<br><br>
-    <b>{top2}</b>（{TYPES[top2]}）
+    <b>{top2}セクションタイプ</b>
     </h2>
     </div>
     """, unsafe_allow_html=True)
