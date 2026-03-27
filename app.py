@@ -207,9 +207,9 @@ def set_bg(image_file):
     height: 70vh;  /* ←これが超重要 */
 }
 
-    .choice-wrapper .stButton {{
+    .choice-wrapper .stButton {
         width: 70%;
-    }}
+    }
 
     /* ===== ボタン（超デカ文字） ===== */
     div.stButton {{
