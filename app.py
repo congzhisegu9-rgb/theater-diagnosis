@@ -1,22 +1,19 @@
 import streamlit as st
 import base64
 
-# ---------- 背景設定 ----------
+# ---------- 背景 ----------
 def set_bg(image_file):
     with open(image_file, "rb") as f:
         img = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
     <style>
-
-    /* ページ全体リセット */
     html, body, .stApp {{
         margin: 0;
         padding: 0;
         height: 100%;
     }}
 
-    /* 背景画像（ズレ防止） */
     .stApp {{
         background-image: url("data:image/png;base64,{img}");
         background-size: cover;
@@ -25,7 +22,6 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* 暗いオーバーレイ */
     .stApp::before {{
         content: "";
         position: fixed;
@@ -37,15 +33,12 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* Streamlitの白背景を完全除去 */
-    .main {{
+    .main, .block-container {{
         background: transparent;
     }}
 
     .block-container {{
         padding-top: 20px;
-        padding-bottom: 0;
-        background: transparent;
     }}
 
     header, footer {{
@@ -145,13 +138,18 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-# ---------- 質問 ----------
 if q_index < len(questions):
     q, choices = questions[q_index]
 
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    st.markdown("## 🎭 セクション適性診断")
+    # タイトル（カード内＆見やすく）
+    st.markdown("""
+    <h2 style='text-align:center; margin-bottom:10px;'>
+    🎭 セクション適性診断
+    </h2>
+    """, unsafe_allow_html=True)
+
     st.caption(f"{q_index+1} / {len(questions)} 問")
 
     st.subheader(f"Q{q_index+1}. {q}")
@@ -164,12 +162,10 @@ if q_index < len(questions):
         st.session_state.q_index += 1
         st.rerun()
 
-    # 進捗バー（下）
     st.progress((q_index + 1) / len(questions))
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- 結果 ----------
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
@@ -183,35 +179,21 @@ else:
 
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
-    # メイン結果（強調）
     st.markdown(f"""
-    <div style="
-        font-size:24px;
-        font-weight:bold;
-        text-align:center;
-        margin:20px 0;
-    ">
-        あなたは<br>
-        <span style="font-size:32px; color:#ff4b4b;">
-        {top1} & {top2}
-        </span><br>
-        タイプ！
+    <div style="text-align:center; font-size:24px; margin:20px 0;">
+    あなたは<br>
+    <span style="font-size:32px; font-weight:bold; color:#ff4b4b;">
+    {top1} & {top2}
+    </span><br>
+    タイプ！
     </div>
     """, unsafe_allow_html=True)
 
-    # 説明ボックス
     st.markdown(f"""
-    <div style="
-        background: #f5f5f5;
-        padding:20px;
-        border-radius:15px;
-        margin-top:20px;
-        line-height:1.8;
-    ">
-        <b>{top1}</b>：{descriptions[top1]}<br><br>
-        <b>{top2}</b>：{descriptions[top2]}<br><br>
-
-        👉 この2セクションで輝けるタイプです！
+    <div style="background:#f5f5f5; padding:20px; border-radius:15px; line-height:1.8;">
+    <b>{top1}</b>：{descriptions[top1]}<br><br>
+    <b>{top2}</b>：{descriptions[top2]}<br><br>
+    👉 この2セクションで輝けるタイプです！
     </div>
     """, unsafe_allow_html=True)
 
