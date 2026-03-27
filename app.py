@@ -27,134 +27,94 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== ローディング ===== */
-    .loading {{
+    /* ===== ローディング画面 ===== */
+    .loading-screen {{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 100vh;
+
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+
+        background: rgba(0,0,0,0.35);
+        z-index: 9999;
+    }}
+
+    /* ===== 三角形コンテナ ===== */
+    .triangle {{
+        width: 140px;
+        height: 120px;
+        position: relative;
+    }}
+
+    /* 各辺 */
+    .line {{
+        position: absolute;
+        background: rgba(255,255,255,0.2);
+    }}
+
+    /* 下辺 */
+    .line1 {{
+        width: 100%;
+        height: 4px;
+        bottom: 0;
+        left: 0;
+        animation: glow1 1.5s infinite;
+    }}
+
+    /* 左斜辺 */
+    .line2 {{
+        width: 4px;
+        height: 100%;
+        transform: rotate(60deg);
+        transform-origin: bottom left;
+        bottom: 0;
+        left: 0;
+        animation: glow2 1.5s infinite;
+    }}
+
+    /* 右斜辺 */
+    .line3 {{
+        width: 4px;
+        height: 100%;
+        transform: rotate(-60deg);
+        transform-origin: bottom right;
+        bottom: 0;
+        right: 0;
+        animation: glow3 1.5s infinite;
+    }}
+
+    /* アニメーション */
+    @keyframes glow1 {{
+        0%, 100% {{ background: rgba(255,255,255,0.2); }}
+        33% {{ background: white; }}
+    }}
+
+    @keyframes glow2 {{
+        0%, 100% {{ background: rgba(255,255,255,0.2); }}
+        66% {{ background: white; }}
+    }}
+
+    @keyframes glow3 {{
+        0%, 100% {{ background: rgba(255,255,255,0.2); }}
+        100% {{ background: white; }}
+    }}
+
+    /* ローディング文字 */
+    .loading-text {{
+        margin-top: 25px;
         color: white;
-        font-size: 30px;
-        font-weight: bold;
+        font-size: 22px;
+        letter-spacing: 0.2em;
     }}
 
-    .spinner {{
-        border: 6px solid rgba(255,255,255,0.2);
-        border-top: 6px solid white;
-        border-radius: 50%;
-        width: 70px;
-        height: 70px;
-        animation: spin 1s linear infinite;
-        margin-bottom: 20px;
-    }}
-
-    @keyframes spin {{
-        0% {{ transform: rotate(0deg); }}
-        100% {{ transform: rotate(360deg); }}
-    }}
-
-    /* ===== ここから元UIそのまま ===== */
-
-    .block-container {{
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 28px;
-
-        background: rgba(255,255,255,0.92);
-        border-radius: 14px;
-
-        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-        backdrop-filter: blur(6px);
-    }}
-
-    header, footer {{
-        visibility: hidden;
-    }}
-
-    .title {{
-        text-align: center;
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 2px;
-        line-height: 1.05;
-    }}
-
-    .subtitle {{
-        text-align: center;
-        color: #888;
-        margin-bottom: 6px;
-        font-size: 14px;
-    }}
-
-    .question {{
-        text-align: center;
-        font-size: 30px;
-        font-weight: 600;
-        margin: 10px 0;
-        line-height: 1.1;
-    }}
-
-    .choice-wrapper {{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }}
-
-    .choice-wrapper .stButton {{
-        width: 70%;
-    }}
-
-    div.stButton {{
-        margin: 0 !important;
-        padding: 0 !important;
-    }}
-
-    div.stButton > button {{
-        width: 100%;
-        height: 52px;
-
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-
-        font-size: 32px;
-        font-weight: 800;
-        color: #333;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        border-radius: 8px;
-
-        letter-spacing: 0.05em;
-        line-height: 1.0;
-
-        transition: all 0.12s ease;
-    }}
-
-    div.stButton > button:hover {{
-        background: rgba(0,0,0,0.06) !important;
-        transform: scale(1.02);
-    }}
-
-    div.stButton.selected > button {{
-        background: rgba(120,150,255,0.25) !important;
-    }}
-
-    div.stButton > button p {{
-        width: 100%;
-        text-align: center !important;
-        margin: 0 !important;
-        line-height: 1.0 !important;
-    }}
-
-    .stProgress > div > div {{
-        background-color: #6c8cff;
+    /* ===== 通常UI（非表示制御） ===== */
+    .hidden {{
+        display: none;
     }}
 
     </style>
@@ -167,13 +127,17 @@ set_bg("prism-logo.png")
 if st.session_state.loading:
 
     st.markdown("""
-    <div class="loading">
-        <div class="spinner"></div>
-        Loading...
+    <div class="loading-screen">
+        <div class="triangle">
+            <div class="line line1"></div>
+            <div class="line line2"></div>
+            <div class="line line3"></div>
+        </div>
+        <div class="loading-text">Loading...</div>
     </div>
     """, unsafe_allow_html=True)
 
-    time.sleep(2)  # ← 好きに調整（1.5〜3秒くらいが自然）
+    time.sleep(2.5)
 
     st.session_state.loading = False
     st.rerun()
@@ -258,7 +222,7 @@ questions = [
     }),
 ]
 
-# ---------- UI（ここから元コードそのまま） ----------
+# ---------- UI ----------
 q_index = st.session_state.q_index
 
 st.markdown(f"""
@@ -275,35 +239,18 @@ if q_index < len(questions):
 
     for choice, secs in choices.items():
 
-        selected_class = ""
-        if st.session_state.selected.get(q_index) == choice:
-            selected_class = "selected"
-
-        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
-
         if st.button(choice, key=f"{q_index}_{choice}"):
 
             st.session_state.selected[q_index] = choice
-
             st.session_state.history.append(secs)
+
             for sec in secs:
                 st.session_state.scores[sec] += 1
 
             st.session_state.q_index += 1
             st.rerun()
 
-        st.markdown("</div>", unsafe_allow_html=True)
-
     st.markdown('</div>', unsafe_allow_html=True)
-
-    if q_index > 0:
-        if st.button("← 戻る"):
-            last_secs = st.session_state.history.pop()
-            for sec in last_secs:
-                st.session_state.scores[sec] -= 1
-
-            st.session_state.q_index -= 1
-            st.rerun()
 
     st.progress((q_index + 1) / len(questions))
 
