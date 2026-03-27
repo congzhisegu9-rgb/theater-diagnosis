@@ -8,15 +8,24 @@ def set_bg(image_file):
 
     st.markdown(f"""
     <style>
-    /* 背景画像 */
+
+    /* ページ全体リセット */
+    html, body, .stApp {{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }}
+
+    /* 背景画像（ズレ防止） */
     .stApp {{
         background-image: url("data:image/png;base64,{img}");
         background-size: cover;
         background-position: center;
+        background-attachment: fixed;
         background-repeat: no-repeat;
     }}
 
-    /* 背景を少し暗くする */
+    /* 暗いオーバーレイ */
     .stApp::before {{
         content: "";
         position: fixed;
@@ -24,36 +33,34 @@ def set_bg(image_file):
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.25);
+        background: rgba(0,0,0,0.3);
         z-index: -1;
     }}
 
-    /* Streamlitの白背景を消す */
+    /* Streamlitの白背景を完全除去 */
     .main {{
         background: transparent;
     }}
+
     .block-container {{
+        padding-top: 20px;
+        padding-bottom: 0;
         background: transparent;
-        padding-top: 50px;
+    }}
+
+    header, footer {{
+        visibility: hidden;
     }}
 
     /* カード */
     .card {{
-        background-color: rgba(255,255,255,0.92);
+        background-color: rgba(255,255,255,0.95);
         padding: 35px;
         border-radius: 20px;
         color: black;
         box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        max-width: 650px;
-        margin: auto;
-    }}
-
-    /* タイトル */
-    .title {{
-        text-align: center;
-        font-size: 30px;
-        font-weight: bold;
-        margin-bottom: 20px;
+        max-width: 600px;
+        margin: 40px auto;
     }}
 
     </style>
@@ -61,7 +68,7 @@ def set_bg(image_file):
 
 set_bg("prism-logo.png")
 
-# ---------- 状態管理 ----------
+# ---------- 状態 ----------
 if "q_index" not in st.session_state:
     st.session_state.q_index = 0
 
@@ -138,17 +145,14 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-# 進捗バー
-st.progress(q_index / len(questions))
-
 # ---------- 質問 ----------
 if q_index < len(questions):
     q, choices = questions[q_index]
 
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    # タイトル（カード内）
     st.markdown("## 🎭 セクション適性診断")
+    st.caption(f"{q_index+1} / {len(questions)} 問")
 
     st.subheader(f"Q{q_index+1}. {q}")
 
@@ -160,10 +164,11 @@ if q_index < len(questions):
         st.session_state.q_index += 1
         st.rerun()
 
-    # ← ここに進捗バー
+    # 進捗バー（下）
     st.progress((q_index + 1) / len(questions))
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 # ---------- 結果 ----------
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
