@@ -9,7 +9,6 @@ def set_bg(image_file):
     st.markdown(f"""
     <style>
 
-    /* 余白リセット（←背景ズレ対策） */
     html, body, .stApp {{
         margin: 0;
         padding: 0;
@@ -24,7 +23,6 @@ def set_bg(image_file):
         background-attachment: fixed;
     }}
 
-    /* 暗いオーバーレイ */
     .stApp::before {{
         content: "";
         position: fixed;
@@ -36,7 +34,6 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* 中央パネル */
     .block-container {{
         max-width: 700px;
         margin: 60px auto;
@@ -51,16 +48,15 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ボタンラッパー */
+    /* ボタン */
     div.stButton {{
         width: 100%;
     }}
 
-    /* ボタン本体（左右に余白を残して広げる） */
     div.stButton > button {{
-        width: calc(100% - 20px) !important;  /* ← 少し余白 */
-        margin-left: 10px;                   /* ← 左余白 */
-        margin-right: 10px;                  /* ← 右余白 */
+        width: calc(100% + 60px) !important;
+        margin-left: -30px;
+        margin-right: -30px;
 
         height: 55px;
         background: transparent !important;
@@ -70,7 +66,7 @@ def set_bg(image_file):
         color: black !important;
         font-size: 16px;
         text-align: left;
-        padding-left: 15px;
+        padding-left: 20px;
 
         margin-top: 6px;
         margin-bottom: 6px;
@@ -79,12 +75,10 @@ def set_bg(image_file):
         border-radius: 10px;
     }}
 
-    /* ホバー */
     div.stButton > button:hover {{
         background: rgba(255,255,255,0.6) !important;
     }}
 
-    /* 選択状態 */
     div.stButton.selected > button {{
         background: rgba(100,150,255,0.65) !important;
         color: white !important;
