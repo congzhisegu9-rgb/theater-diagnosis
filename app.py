@@ -27,7 +27,7 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== ローディング（ズレ完全修正） ===== */
+    /* ===== ローディング（ズレ完全修正＋元の三角形） ===== */
     .loading-screen {{
         position: fixed;
         top: 0;
@@ -56,46 +56,63 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* 正三角形 */
+    /* ===== 正三角形（辺が光るやつ） ===== */
     .triangle {{
-        width: 0;
-        height: 0;
-        border-left: 80px solid transparent;
-        border-right: 80px solid transparent;
-        border-bottom: 138px solid rgba(255,255,255,0.15);
+        width: 160px;
+        height: 140px;
         position: relative;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }}
 
-    .triangle::before,
-    .triangle::after {{
-        content: "";
+    .line {{
         position: absolute;
-        width: 0;
-        height: 0;
-        border-left: 80px solid transparent;
-        border-right: 80px solid transparent;
+        background: rgba(255,255,255,0.2);
     }}
 
-    .triangle::before {{
-        border-bottom: 138px solid white;
-        opacity: 0;
+    /* 下辺 */
+    .l1 {{
+        width: 100%;
+        height: 4px;
+        bottom: 0;
+        left: 0;
         animation: glow1 1.8s infinite;
     }}
 
-    .triangle::after {{
-        border-bottom: 138px solid white;
-        opacity: 0;
+    /* 左辺 */
+    .l2 {{
+        width: 140%;
+        height: 4px;
+        bottom: 0;
+        left: 0;
+        transform-origin: left bottom;
+        transform: rotate(-60deg);
         animation: glow2 1.8s infinite;
     }}
 
+    /* 右辺 */
+    .l3 {{
+        width: 140%;
+        height: 4px;
+        bottom: 0;
+        right: 0;
+        transform-origin: right bottom;
+        transform: rotate(60deg);
+        animation: glow3 1.8s infinite;
+    }}
+
     @keyframes glow1 {{
-        0%,100% {{ opacity: 0; }}
-        30% {{ opacity: 1; }}
+        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        20% {{ background: white; }}
     }}
 
     @keyframes glow2 {{
-        0%,100% {{ opacity: 0; }}
-        70% {{ opacity: 1; }}
+        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        50% {{ background: white; }}
+    }}
+
+    @keyframes glow3 {{
+        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        80% {{ background: white; }}
     }}
 
     .loading-text {{
@@ -116,7 +133,11 @@ if st.session_state.loading:
 
     st.markdown("""
     <div class="loading-screen">
-        <div class="triangle"></div>
+        <div class="triangle">
+            <div class="line l1"></div>
+            <div class="line l2"></div>
+            <div class="line l3"></div>
+        </div>
         <div class="loading-text">Loading...</div>
     </div>
     """, unsafe_allow_html=True)
@@ -126,6 +147,7 @@ if st.session_state.loading:
     st.session_state.loading = False
     st.rerun()
 
+# ===== ここから下はあなたのコードそのまま貼る =====
 # ===== ここから下はあなたのコードそのまま =====
 import streamlit as st
 import base64
