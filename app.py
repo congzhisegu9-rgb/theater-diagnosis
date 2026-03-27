@@ -55,7 +55,7 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* ===== 三角形 ===== */
+    /* ===== 正三角形 ===== */
     .triangle-svg {{
         width: 180px;
         height: 156px;
@@ -72,11 +72,11 @@ def set_bg(image_file):
         stroke-dashoffset: 300;
 
         animation:
-            spin 0.7s linear 2,     /* ← 2周回る */
-            finish 0.4s ease forwards 1.4s; /* ← 最後に全部光る */
+            spin 0.6s linear 3,          /* ← 約1.8秒で3周 */
+            finish 0.7s ease forwards 1.8s; /* ← 残り0.7秒で完成 */
     }}
 
-    /* 周回（時計回り風） */
+    /* ===== 時計回りに周回 ===== */
     @keyframes spin {{
         0% {{
             stroke-dashoffset: 300;
@@ -86,7 +86,7 @@ def set_bg(image_file):
         }}
     }}
 
-    /* 完成演出 */
+    /* ===== 最後に全部光る ===== */
     @keyframes finish {{
         0% {{
             stroke-dashoffset: 0;
@@ -123,10 +123,13 @@ if st.session_state.loading:
     </div>
     """, unsafe_allow_html=True)
 
-    time.sleep(1.5)
+    # ← 全体時間
+    time.sleep(2.5)
 
     st.session_state.loading = False
     st.rerun()
+
+# ===== 以下にあなたの元コードをそのまま貼る =====
 
 # ===== 以下にあなたの元コードをそのまま貼る =====
 # ===== あなたのコードをこの下にそのまま貼る =====
