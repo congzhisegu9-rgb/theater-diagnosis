@@ -46,45 +46,39 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
- /* ボタン */
-div.stButton {
-    width: 100%;
-}
+    /* ボタン全体 */
+    div.stButton {{
+        width: 100%;
+    }}
 
-/* 本体 */
-div.stButton > button {
-    width: calc(100% + 40px) !important;   /* ← 広げる */
-    margin-left: -20px;                    /* ← 左にはみ出し */
-    margin-right: -20px;                   /* ← 右にはみ出し */
+    /* ボタン本体（横いっぱい） */
+    div.stButton > button {{
+        width: calc(100% + 80px) !important;
+        margin-left: -40px;
+        margin-right: -40px;
 
-    height: 55px;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+        height: 55px;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
 
-    color: black !important;
-    font-size: 16px;
-    text-align: left;
-    padding-left: 20px;
+        color: black !important;
+        font-size: 16px;
+        text-align: left;
+        padding-left: 20px;
 
-    margin-top: 6px;
-    margin-bottom: 6px;
+        margin-top: 6px;
+        margin-bottom: 6px;
 
-    transition: 0.2s;
-}
+        transition: 0.2s;
+    }}
 
-/* ホバー */
-div.stButton > button:hover {
-    background: rgba(255,255,255,0.6) !important;
-}
+    /* ホバー */
+    div.stButton > button:hover {{
+        background: rgba(255,255,255,0.6) !important;
+    }}
 
-/* 選択状態 */
-div.stButton.selected > button {
-    background: rgba(100,150,255,0.6) !important;
-    color: white !important;
-}
-
-    /* 選択済み */
+    /* 選択状態 */
     div.stButton.selected > button {{
         background: rgba(100,150,255,0.6) !important;
         color: white !important;
@@ -106,7 +100,6 @@ if "scores" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# 👇 追加（選択状態）
 if "selected" not in st.session_state:
     st.session_state.selected = {}
 
@@ -155,12 +148,10 @@ if q_index < len(questions):
         if st.session_state.selected.get(q_index) == choice:
             selected_class = "selected"
 
-        # 👇 ボタンラップ（CSS用）
         st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
 
         if st.button(choice, key=f"{q_index}_{choice}"):
 
-            # 選択保存
             st.session_state.selected[q_index] = choice
 
             st.session_state.history.append(secs)
