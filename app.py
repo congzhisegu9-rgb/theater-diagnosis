@@ -202,6 +202,8 @@ def set_bg(image_file):
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;  /* ←これ追加 */
+    　　 min-height: 300px;
     }}
 
     .choice-wrapper .stButton {{
