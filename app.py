@@ -15,7 +15,6 @@ def set_bg(image_file):
         height: 100%;
     }}
 
-    /* 背景 */
     .stApp {{
         background-image: url("data:image/png;base64,{img}");
         background-size: cover;
@@ -23,7 +22,6 @@ def set_bg(image_file):
         background-attachment: fixed;
     }}
 
-    /* 暗めオーバーレイ */
     .stApp::before {{
         content: "";
         position: fixed;
@@ -33,22 +31,18 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* 中央パネル */
-    .main-panel {{
-        background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(10px);
-        padding: 40px;
-        border-radius: 20px;
+    /* 👇 ここが重要：中央パネル化 */
+    .block-container {{
         max-width: 700px;
         margin: 60px auto;
+        padding: 40px;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }}
 
-    /* ボタン */
-    .stButton {{
-        width: 100%;
-    }}
-
+    /* ボタン全幅 */
     .stButton > button {{
         width: 100% !important;
         height: 55px;
@@ -112,15 +106,12 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-st.markdown('<div class="main-panel">', unsafe_allow_html=True)
-
 st.markdown("## 🎭 セクション適性診断")
 
 if q_index < len(questions):
     q, choices = questions[q_index]
 
     st.caption(f"{q_index+1} / {len(questions)} 問")
-
     st.markdown(f"### Q{q_index+1}. {q}")
 
     for choice, secs in choices.items():
@@ -161,5 +152,3 @@ else:
         st.session_state.scores = {k:0 for k in st.session_state.scores}
         st.session_state.history = []
         st.rerun()
-
-st.markdown('</div>', unsafe_allow_html=True)
