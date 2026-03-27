@@ -22,7 +22,7 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== 中央カード（縦圧縮） ===== */
+    /* ===== 中央カード ===== */
     .block-container {{
         max-width: 600px;
         margin: 40px auto;
@@ -39,12 +39,12 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ===== タイトル（大きく＋詰める） ===== */
+    /* ===== タイトル（大きく） ===== */
     .title {{
         text-align: center;
-        font-size: 34px;
+        font-size: 42px;
         font-weight: 700;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         line-height: 1.2;
     }}
 
@@ -52,15 +52,16 @@ def set_bg(image_file):
         text-align: center;
         color: #888;
         margin-bottom: 16px;
-        font-size: 14px;
+        font-size: 16px;
     }}
 
     .question {{
         text-align: center;
-        font-size: 26px;
+        font-size: 30px;
         font-weight: 600;
         margin: 20px 0;
         line-height: 1.3;
+        letter-spacing: 0.03em;
     }}
 
     /* ===== 選択肢中央寄せ ===== */
@@ -74,10 +75,10 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン（コンパクト＆読みやすい） ===== */
+    /* ===== ボタン（大きく＆押しやすく） ===== */
     div.stButton > button {{
         width: 100%;
-        height: 44px;
+        height: 50px;
 
         display: flex !important;
         align-items: center;
@@ -87,7 +88,7 @@ def set_bg(image_file):
         border: none !important;
         box-shadow: none !important;
 
-        font-size: 19px;
+        font-size: 22px;
         color: #333;
 
         margin: 6px 0;
