@@ -47,42 +47,40 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* タイトル */
-    h2 {{
-        text-align: center;
+    /* ===== ラジオ完全カスタム ===== */
+
+    /* 丸を消す */
+    input[type="radio"] {{
+        display: none;
     }}
 
-    /* radioを完全カスタム */
+    /* グループ */
     div[role="radiogroup"] {{
-        gap: 18px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 30px;
+        gap: 25px;
+        margin-top: 40px;
     }}
 
-    /* 各選択肢 */
+    /* ラベル（＝選択肢） */
     div[role="radiogroup"] label {{
-        width: 85%;
-        padding: 18px;
-        border-radius: 14px;
+        font-size: 22px;
         text-align: center;
-        font-size: 18px;
         cursor: pointer;
-        background: rgba(255,255,255,0.6);
         transition: 0.2s;
+        padding: 8px 0;
     }}
 
     /* ホバー */
     div[role="radiogroup"] label:hover {{
-        background: rgba(255,255,255,0.9);
+        opacity: 0.6;
     }}
 
-    /* 選択状態 */
+    /* 選択時（ほんのり強調） */
     div[role="radiogroup"] input:checked + div {{
-        background: rgba(100,150,255,0.7) !important;
-        color: white;
-        border-radius: 14px;
+        font-weight: bold;
+        transform: scale(1.05);
     }}
 
     </style>
