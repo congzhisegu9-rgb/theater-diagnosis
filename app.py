@@ -10,40 +10,15 @@ def get_base64(file_path):
 img = get_base64("prism-logo.jpg")
 
 # ===== CSS =====
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/jpg;base64,{img}");
-        background-size: cover;
-        background-position: center;
-    }}
-
-    .stApp::before {{
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: -1;
-    }}
-
-    @keyframes fadePage {{
-        from {{ opacity: 0; transform: translateY(30px); }}
-        to {{ opacity: 1; transform: translateY(0); }}
-    }}
-
-    .card {{
-        background-color: rgba(255,255,255,0.9);
-        padding: 30px;
-        border-radius: 20px;
-        max-width: 650px;
-        margin: 30px auto;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        animation: fadePage 0.6s ease;
-    }}
+.card {
+    background-color: rgba(255,255,255,0.9);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 650px;
+    margin: 30px auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    animation: fadePage 0.6s ease;
+}
  /* ===== 質問カードを丸ごと囲う ===== */
     div[data-testid="stVerticalBlock"]:has(div.question-block) {{
         background-color: rgba(255, 255, 255, 0.9);
@@ -140,30 +115,26 @@ st.markdown(
 )
 
 # ===== 質問 =====
-if st.session_state.q_index < len(QUESTIONS):
-    q = QUESTIONS[st.session_state.q_index]
+with st.container():
+    st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    with st.container():
-        st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.markdown(
+        f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>",
+        unsafe_allow_html=True
+    )
 
-        st.markdown(
-            f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>",
-            unsafe_allow_html=True
-        )
+    choice = st.radio("", [c["text"] for c in q["choices"]])
 
-        choice = st.radio("", [c["text"] for c in q["choices"]])
+    if st.button("次へ", use_container_width=True):
+        for c in q["choices"]:
+            if c["text"] == choice:
+                for sec, pt in c["scores"].items():
+                    st.session_state.scores[sec] += pt
 
-        if st.button("次へ", use_container_width=True):
-            for c in q["choices"]:
-                if c["text"] == choice:
-                    for sec, pt in c["scores"].items():
-                        st.session_state.scores[sec] += pt
+        st.session_state.q_index += 1
+        st.rerun()
 
-            st.session_state.q_index += 1
-            st.rerun()
-
-        st.markdown('</div>', unsafe_allow_html=True)
-
+    st.markdown('</div>', unsafe_allow_html=True)
 # ===== 結果 =====
 else:
     sorted_scores = sorted(st.session_state.scores.items(), key=lambda x:x[1], reverse=True)
