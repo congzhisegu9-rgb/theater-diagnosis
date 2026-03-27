@@ -35,9 +35,9 @@ def set_bg(image_file):
     .block-container {{
         max-width: 700px;
         margin: 60px auto;
-        padding: 60px 40px;
+        padding: 50px 40px;
         background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         text-align: center;
@@ -47,45 +47,42 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ラジオ全体 */
+    /* タイトル */
+    h2 {{
+        text-align: center;
+    }}
+
+    /* radioを完全カスタム */
     div[role="radiogroup"] {{
+        gap: 18px;
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-top: 30px;
     }}
 
     /* 各選択肢 */
     div[role="radiogroup"] label {{
-        width: 90%;
-        padding: 18px 0;
-        margin: 8px 0;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: 0.2s;
-    }}
-
-    /* 👇 これが今回の本質 */
-    div[role="radiogroup"] label > div {{
-        width: 100%;
+        width: 85%;
+        padding: 18px;
+        border-radius: 14px;
         text-align: center;
-        font-size: 20px;
+        font-size: 18px;
+        cursor: pointer;
+        background: rgba(255,255,255,0.6);
+        transition: 0.2s;
     }}
 
     /* ホバー */
     div[role="radiogroup"] label:hover {{
-        background: rgba(255,255,255,0.5);
+        background: rgba(255,255,255,0.9);
     }}
 
     /* 選択状態 */
     div[role="radiogroup"] input:checked + div {{
-        background: rgba(100,150,255,0.5);
+        background: rgba(100,150,255,0.7) !important;
         color: white;
-        border-radius: 12px;
-    }}
-
-    /* ラジオ丸を消す */
-    div[role="radiogroup"] input {{
-        display: none;
+        border-radius: 14px;
     }}
 
     </style>
@@ -135,36 +132,37 @@ questions = [
 q_index = st.session_state.q_index
 
 st.markdown("## 🎭 セクション適性診断")
-st.caption(f"{q_index+1} / {len(questions)} 問")
 
 if q_index < len(questions):
     q, choices = questions[q_index]
 
+    st.caption(f"{q_index+1} / {len(questions)} 問")
     st.markdown(f"### Q{q_index+1}. {q}")
 
-    selected = st.radio(
+    choice = st.radio(
         "",
         list(choices.keys()),
         key=f"radio_{q_index}"
     )
 
-    if st.button("次へ"):
-        secs = choices[selected]
-        st.session_state.history.append(secs)
+    col1, col2 = st.columns(2)
 
-        for sec in secs:
-            st.session_state.scores[sec] += 1
+    with col1:
+        if q_index > 0:
+            if st.button("← 戻る"):
+                last_secs = st.session_state.history.pop()
+                for sec in last_secs:
+                    st.session_state.scores[sec] -= 1
+                st.session_state.q_index -= 1
+                st.rerun()
 
-        st.session_state.q_index += 1
-        st.rerun()
-
-    if q_index > 0:
-        if st.button("← 戻る"):
-            last_secs = st.session_state.history.pop()
-            for sec in last_secs:
-                st.session_state.scores[sec] -= 1
-
-            st.session_state.q_index -= 1
+    with col2:
+        if st.button("次へ"):
+            secs = choices[choice]
+            st.session_state.history.append(secs)
+            for sec in secs:
+                st.session_state.scores[sec] += 1
+            st.session_state.q_index += 1
             st.rerun()
 
     st.progress((q_index + 1) / len(questions))
