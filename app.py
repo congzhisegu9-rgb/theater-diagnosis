@@ -22,11 +22,11 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== 中央カード ===== */
+    /* ===== 中央カード（縦圧縮） ===== */
     .block-container {{
         max-width: 600px;
-        margin: 80px auto;
-        padding: 60px 50px;
+        margin: 40px auto;
+        padding: 40px 40px;
 
         background: rgba(255,255,255,0.92);
         border-radius: 16px;
@@ -39,25 +39,28 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ===== タイトル ===== */
+    /* ===== タイトル（大きく＋詰める） ===== */
     .title {{
         text-align: center;
-        font-size: 28px;
+        font-size: 34px;
         font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 4px;
+        line-height: 1.2;
     }}
 
     .subtitle {{
         text-align: center;
         color: #888;
-        margin-bottom: 30px;
+        margin-bottom: 16px;
+        font-size: 14px;
     }}
 
     .question {{
         text-align: center;
-        font-size: 22px;
+        font-size: 26px;
         font-weight: 600;
-        margin: 30px 0;
+        margin: 20px 0;
+        line-height: 1.3;
     }}
 
     /* ===== 選択肢中央寄せ ===== */
@@ -71,10 +74,10 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン（完全中央揃え） ===== */
+    /* ===== ボタン（コンパクト＆読みやすい） ===== */
     div.stButton > button {{
         width: 100%;
-        height: 50px;
+        height: 44px;
 
         display: flex !important;
         align-items: center;
@@ -84,10 +87,10 @@ def set_bg(image_file):
         border: none !important;
         box-shadow: none !important;
 
-        font-size: 18px;
+        font-size: 19px;
         color: #333;
 
-        margin: 12px 0;
+        margin: 6px 0;
         border-radius: 8px;
 
         letter-spacing: 0.05em;
@@ -104,7 +107,7 @@ def set_bg(image_file):
         font-weight: 600;
     }}
 
-    /* テキスト強制中央 */
+    /* テキスト中央 */
     div.stButton > button p {{
         width: 100%;
         text-align: center !important;
@@ -258,7 +261,7 @@ else:
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
     st.markdown(f"""
-    <div style="background:rgba(255,255,255,0.85); padding:25px; border-radius:12px; text-align:center;">
+    <div style="background:rgba(255,255,255,0.85); padding:20px; border-radius:12px; text-align:center;">
     <h2>{top1} & {top2} タイプ！</h2>
     <p><b>{top1}</b><br>{descriptions[top1]}</p>
     <p><b>{top2}</b><br>{descriptions[top2]}</p>
