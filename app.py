@@ -22,11 +22,11 @@ def get_base64(file_path):
 
 img = get_base64("prism-logo.jpg")
 
-# ===== CSS（ここが本体）=====
+# ===== CSS（完成版）=====
 st.markdown(f"""
 <style>
 
-/* 背景 */
+/* ===== 背景 ===== */
 .stApp {{
     background-image: url("data:image/jpg;base64,{img}");
     background-size: cover;
@@ -38,31 +38,42 @@ st.markdown(f"""
     position:fixed;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,0.25);
+    backdrop-filter: blur(8px); /* ぼかし */
+    background: rgba(0,0,0,0.35); /* 暗さ */
     z-index:-1;
 }}
 
-/* フォント */
+/* ===== フォント ===== */
 html, body, [class*="css"] {{
     font-family: "Helvetica Neue", "Noto Sans JP", sans-serif;
 }}
 
-/* ガラスカード */
+/* ===== ガラスカード ===== */
 .glass {{
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: linear-gradient(
+        rgba(255,255,255,0.45),
+        rgba(255,255,255,0.25)
+    ); /* ←方法A */
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
     border-radius: 20px;
     padding: 35px;
     max-width: 720px;
     margin: 30px auto;
 
-    border: 1px solid rgba(255,255,255,0.3);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
 
     animation: fadeIn 0.6s ease;
     text-align: center;
+}}
+
+/* ===== テキスト（方法B） ===== */
+.glass h1, .glass h2, .glass h3 {{
+    color: #111;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.6);
 }}
 
 .glass h1 {{
@@ -70,26 +81,29 @@ html, body, [class*="css"] {{
 }}
 
 .glass h3 {{
-    font-weight: 500;
     margin-bottom: 20px;
 }}
 
-/* 選択肢 */
+/* ===== 選択肢 ===== */
+div[data-testid="stRadio"] {{
+    margin-top: 15px;
+}}
+
 div[data-testid="stRadio"] label {{
-    background: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.5);
     margin: 8px 0;
     padding: 12px 14px;
     border-radius: 12px;
     transition: 0.2s;
-    backdrop-filter: blur(6px);
+    color: black !important;
 }}
 
 div[data-testid="stRadio"] label:hover {{
-    background: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.75);
     transform: translateX(6px);
 }}
 
-/* アニメーション */
+/* ===== アニメーション ===== */
 @keyframes fadeIn {{
     from {{opacity:0; transform: translateY(20px);}}
     to {{opacity:1; transform: translateY(0);}}
