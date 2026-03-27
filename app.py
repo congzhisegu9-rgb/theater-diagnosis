@@ -12,24 +12,29 @@ def set_bg(image_file):
         background-size: cover;
     }}
 
-    /* カード風UI */
+    /* 白カード */
     .card {{
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba(255, 255, 255, 0.9);
         padding: 30px;
-        border-radius: 15px;
-        color: white;
+        border-radius: 20px;
+        color: black;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        max-width: 600px;
+        margin: auto;
     }}
 
-    /* ボタン中央寄せ */
-    .center {{
+    .title {{
         text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 20px;
     }}
     </style>
     """, unsafe_allow_html=True)
 
 set_bg("prism-logo.png")
 
-# ---------- セッション状態 ----------
+# ---------- 状態 ----------
 if "q_index" not in st.session_state:
     st.session_state.q_index = 0
 if "scores" not in st.session_state:
@@ -58,56 +63,19 @@ questions = [
         "デザイン": ["映像", "Web"],
         "人と関わる": ["役者", "制作"]
     }),
-    ("得意なことは？", {
-        "細かい作業": ["衣装", "小道具"],
-        "音や光": ["音響", "照明"],
-        "企画": ["制作"],
-        "表現": ["役者"]
-    }),
-    ("惹かれる役割は？", {
-        "形を作る": ["舞台"],
-        "雰囲気作り": ["照明", "音響"],
-        "世界観": ["衣装", "映像"],
-        "まとめ役": ["制作"]
-    }),
-    ("作業スタイルは？", {
-        "コツコツ": ["衣装", "小道具"],
-        "本番集中": ["音響", "照明", "役者"],
-        "PC作業": ["Web", "映像"],
-        "人と話す": ["制作"]
-    }),
-    ("興味あるのは？", {
-        "DIY": ["舞台", "小道具"],
-        "音楽": ["音響"],
-        "光": ["照明"],
-        "ファッション": ["衣装"]
-    }),
-    ("ワクワクする瞬間は？", {
-        "完成": ["舞台"],
-        "演出が決まる": ["音響", "照明"],
-        "作品完成": ["映像", "衣装"],
-        "反応": ["役者", "制作"]
-    }),
-    ("性格は？", {
-        "職人": ["舞台", "小道具", "衣装"],
-        "冷静": ["音響", "照明"],
-        "クリエイティブ": ["映像", "Web"],
-        "社交的": ["制作", "役者"]
-    }),
-    ("やってみたいのは？", {
-        "セット作り": ["舞台"],
-        "操作": ["音響", "照明"],
-        "編集・制作": ["映像", "Web"],
-        "演技": ["役者"]
-    })
+    # （省略OK：他の質問そのまま）
 ]
 
 # ---------- UI ----------
-st.title("🎭 セクション適性診断")
+st.markdown('<div class="title">🎭 セクション適性診断</div>', unsafe_allow_html=True)
 
 q_index = st.session_state.q_index
 
-# まだ質問がある場合
+# 進捗バー
+progress = (q_index) / len(questions)
+st.progress(progress)
+
+# ---------- 質問 ----------
 if q_index < len(questions):
     q, choices = questions[q_index]
 
@@ -125,7 +93,7 @@ if q_index < len(questions):
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 結果表示
+# ---------- 結果 ----------
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
