@@ -10,18 +10,33 @@ def get_base64(file_path):
 img = get_base64("prism-logo.jpg")
 
 # ===== CSS =====
-.card {
-    background-color: rgba(255,255,255,0.9);
-    padding: 30px;
-    border-radius: 20px;
-    max-width: 650px;
-    margin: 30px auto;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    animation: fadePage 0.6s ease;
-}
- /* ===== 質問カードを丸ごと囲う ===== */
-    div[data-testid="stVerticalBlock"]:has(div.question-block) {{
-        background-color: rgba(255, 255, 255, 0.9);
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpg;base64,{img}");
+        background-size: cover;
+        background-position: center;
+    }}
+
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: -1;
+    }}
+
+    @keyframes fadePage {{
+        from {{ opacity: 0; transform: translateY(30px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
+    }}
+
+    .card {{
+        background-color: rgba(255,255,255,0.9);
         padding: 30px;
         border-radius: 20px;
         max-width: 650px;
@@ -29,6 +44,7 @@ img = get_base64("prism-logo.jpg")
         box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         animation: fadePage 0.6s ease;
     }}
+
     .card h1, .card h2, .card h3 {{
         color: black;
         text-align: center;
@@ -43,6 +59,10 @@ img = get_base64("prism-logo.jpg")
     div[data-testid="stRadio"] label:hover {{
         background-color: rgba(0,0,0,0.1);
         border-radius: 10px;
+    }}
+
+    button {{
+        transition: 0.2s;
     }}
 
     button:hover {{
@@ -85,18 +105,18 @@ if "q_index" not in st.session_state:
     st.session_state.q_index = 0
     st.session_state.scores = {s:0 for s in SECTIONS}
 
-# ===== ローディング画面 =====
+# ===== ローディング =====
 if not st.session_state.started:
 
     st.markdown('<div class="card"><h2>読み込み中...</h2></div>', unsafe_allow_html=True)
 
     progress = st.progress(0)
-    percent_text = st.empty()
+    percent = st.empty()
 
     for i in range(101):
-        time.sleep(0.02)  # スピード調整
+        time.sleep(0.02)
         progress.progress(i)
-        percent_text.markdown(
+        percent.markdown(
             f"<h3 style='text-align:center;color:white;'>{i}%</h3>",
             unsafe_allow_html=True
         )
@@ -108,14 +128,16 @@ if not st.session_state.started:
 st.markdown(
     """
     <div class="card">
-        <h1>セクション適性診断</h1>
+        <h1>🎭 セクション適性診断</h1>
     </div>
     """,
     unsafe_allow_html=True
 )
 
 # ===== 質問 =====
-with st.container():
+if st.session_state.q_index < len(QUESTIONS):
+    q = QUESTIONS[st.session_state.q_index]
+
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
     st.markdown(
@@ -135,10 +157,17 @@ with st.container():
         st.rerun()
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 # ===== 結果 =====
 else:
-    sorted_scores = sorted(st.session_state.scores.items(), key=lambda x:x[1], reverse=True)
-    top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
+    sorted_scores = sorted(
+        st.session_state.scores.items(),
+        key=lambda x:x[1],
+        reverse=True
+    )
+
+    top1 = sorted_scores[0][0]
+    top2 = sorted_scores[1][0]
 
     st.markdown(
         f"""
