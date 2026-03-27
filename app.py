@@ -77,3 +77,42 @@ choice = st.radio(
     ["体を動かす","機械いじり","デザイン","裏方で支える"],
     index=None
 )
+.stApp {
+    background-image: url("data:image/jpg;base64,{img}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+html, body, .stApp {
+    height: 100%;
+}
+
+.stApp::before {
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    backdrop-filter: blur(6px);
+    background: rgba(0,0,0,0.25);
+    z-index:-1;
+}
+
+.block-container {
+    padding-top: 0rem;
+}
+
+div[data-testid="stRadio"] {
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(12px);
+
+    border-radius: 25px;
+    padding: 40px;
+
+    width: 500px;
+    margin: 150px auto;
+
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+}
