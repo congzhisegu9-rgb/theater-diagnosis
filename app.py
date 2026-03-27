@@ -2,7 +2,7 @@ import streamlit as st
 import base64
 import time
 
-# ===== 初期化（←最重要：一番上に置く）=====
+# ===== 初期化 =====
 if "started" not in st.session_state:
     st.session_state.started = False
 
@@ -22,12 +22,14 @@ def get_base64(file_path):
 
 img = get_base64("prism-logo.jpg")
 
-# ===== CSS =====
+# ===== CSS（ここが重要）=====
 st.markdown(f"""
 <style>
+
 .stApp {{
     background-image: url("data:image/jpg;base64,{img}");
     background-size: cover;
+    background-position: center;
 }}
 
 .stApp::before {{
@@ -39,12 +41,25 @@ st.markdown(f"""
     z-index: -1;
 }}
 
+@keyframes fadeIn {{
+    from {{
+        opacity: 0;
+        transform: translateY(30px);
+    }}
+    to {{
+        opacity: 1;
+        transform: translateY(0);
+    }}
+}}
+
 .card {{
     background: rgba(255,255,255,0.9);
     padding: 30px;
     border-radius: 20px;
-    max-width: 650px;
+    max-width: 700px;
     margin: 30px auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    animation: fadeIn 0.6s ease;
 }}
 
 .card h1, .card h2, .card h3 {{
@@ -54,6 +69,8 @@ st.markdown(f"""
 
 div[data-testid="stRadio"] label {{
     color: black !important;
+    padding: 10px;
+    transition: 0.2s;
 }}
 
 div[data-testid="stRadio"] label:hover {{
@@ -61,9 +78,14 @@ div[data-testid="stRadio"] label:hover {{
     border-radius: 10px;
 }}
 
+button {{
+    transition: 0.2s;
+}}
+
 button:hover {{
     transform: scale(1.05);
 }}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -91,11 +113,13 @@ QUESTIONS = [
 
 # ===== ローディング =====
 if not st.session_state.started:
-    st.markdown('<div class="card"><h2>読み込み中...</h2></div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="card"><h2>Loading...</h2></div>', unsafe_allow_html=True)
 
     bar = st.progress(0)
+
     for i in range(101):
-        time.sleep(0.01)
+        time.sleep(0.015)
         bar.progress(i)
 
     st.session_state.started = True
@@ -108,16 +132,20 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ===== 質問（カード②）=====
+# ===== 質問（カード②：確実に包む）=====
 if st.session_state.q_index < len(QUESTIONS):
+
     q = QUESTIONS[st.session_state.q_index]
 
+    # 👇 containerで完全に囲う
     with st.container():
         st.markdown('<div class="card">', unsafe_allow_html=True)
 
         st.markdown(f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>", unsafe_allow_html=True)
 
         choice = st.radio("", [c["text"] for c in q["choices"]])
+
+        st.markdown("<br>", unsafe_allow_html=True)
 
         if st.button("次へ", use_container_width=True):
             for c in q["choices"]:
@@ -132,7 +160,11 @@ if st.session_state.q_index < len(QUESTIONS):
 
 # ===== 結果 =====
 else:
-    sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
+    sorted_scores = sorted(
+        st.session_state.scores.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )
 
     top1 = sorted_scores[0][0]
     top2 = sorted_scores[1][0]
