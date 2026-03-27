@@ -72,11 +72,11 @@ def set_bg(image_file):
         stroke-dashoffset: 300;
 
         animation:
-            spin 0.6s linear 3,
+            spin 0.8s linear 3,
             finish 0.7s ease forwards 1.8s;
     }}
 
-    /* ===== 時計回り（パス順で制御） ===== */
+    /* ===== 時計回り ===== */
     @keyframes spin {{
         0% {{
             stroke-dashoffset: 300;
@@ -86,11 +86,14 @@ def set_bg(image_file):
         }}
     }}
 
+    /* ===== 最後に全部光る ===== */
     @keyframes finish {{
         0% {{
-            stroke: rgba(255,255,255,0.6);
+            stroke-dashoffset: 0;
+            stroke: rgba(255,255,255,0.5);
         }}
         100% {{
+            stroke-dashoffset: 0;
             stroke: white;
         }}
     }}
@@ -114,7 +117,7 @@ if st.session_state.loading:
     st.markdown("""
     <div class="loading-screen">
         <svg class="triangle-svg" viewBox="0 0 100 86.6">
-            <!-- ★ここを修正 -->
+            <!-- 時計回り -->
             <path d="M50 0 L100 86.6 L0 86.6 Z" />
         </svg>
         <div class="loading-text">Loading...</div>
@@ -125,6 +128,8 @@ if st.session_state.loading:
 
     st.session_state.loading = False
     st.rerun()
+
+# ===== 以下にあなたの元コードをそのまま貼る =====
 
 # ===== 以下にあなたの元コードをそのまま貼る =====
 # ===== 以下にあなたの元コードをそのまま貼る =====
