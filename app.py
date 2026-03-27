@@ -47,7 +47,7 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ラジオボタン全体 */
+    /* ラジオ全体 */
     div[role="radiogroup"] {{
         display: flex;
         flex-direction: column;
@@ -59,11 +59,16 @@ def set_bg(image_file):
         width: 90%;
         padding: 18px 0;
         margin: 8px 0;
-        text-align: center;
-        font-size: 20px;
         border-radius: 12px;
         cursor: pointer;
         transition: 0.2s;
+    }}
+
+    /* 👇 これが今回の本質 */
+    div[role="radiogroup"] label > div {{
+        width: 100%;
+        text-align: center;
+        font-size: 20px;
     }}
 
     /* ホバー */
@@ -137,7 +142,6 @@ if q_index < len(questions):
 
     st.markdown(f"### Q{q_index+1}. {q}")
 
-    # 👇 ラジオに変更（これが本質）
     selected = st.radio(
         "",
         list(choices.keys()),
@@ -183,5 +187,5 @@ else:
     if st.button("もう一度"):
         st.session_state.q_index = 0
         st.session_state.scores = {k:0 for k in st.session_state.scores}
-        st.session_state.history = {}
+        st.session_state.history = []
         st.rerun()
