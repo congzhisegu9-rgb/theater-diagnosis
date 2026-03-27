@@ -31,7 +31,7 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* 👇 ここが重要：中央パネル化 */
+    /* 中央パネル */
     .block-container {{
         max-width: 700px;
         margin: 60px auto;
@@ -42,34 +42,35 @@ def set_bg(image_file):
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }}
 
-/* ボタンの箱を消す */
-.stButton > button {{
-    background: rgba(255,255,255,0.6) !important;
-    border: none !important;
-    box-shadow: none !important;
-    color: black !important;
-}}
+    header, footer {{
+        visibility: hidden;
+    }}
 
-/* ホバー時だけ少し強調 */
-.stButton > button:hover {{
-    background: rgba(255,255,255,0.85) !important;
-}}
-/* ボタン全幅 */
-    .stButton > button {{
+    /* ボタン */
+    div.stButton > button {{
         width: 100% !important;
         height: 55px;
-        border-radius: 12px;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: black !important;
         font-size: 16px;
+        text-align: left;
+        padding-left: 10px;
         margin: 6px 0;
         transition: 0.2s;
     }}
 
-    .stButton > button:hover {{
-        transform: scale(1.02);
+    /* ホバー */
+    div.stButton > button:hover {{
+        background: rgba(255,255,255,0.6) !important;
     }}
 
-    header, footer {{
-        visibility: hidden;
+    /* 選択済み */
+    div.stButton.selected > button {{
+        background: rgba(100,150,255,0.6) !important;
+        color: white !important;
+        border-radius: 8px;
     }}
 
     </style>
@@ -86,6 +87,10 @@ if "scores" not in st.session_state:
 
 if "history" not in st.session_state:
     st.session_state.history = []
+
+# 👇 追加（選択状態）
+if "selected" not in st.session_state:
+    st.session_state.selected = {}
 
 # ---------- データ ----------
 descriptions = {
@@ -127,18 +132,34 @@ if q_index < len(questions):
     st.markdown(f"### Q{q_index+1}. {q}")
 
     for choice, secs in choices.items():
+
+        selected_class = ""
+        if st.session_state.selected.get(q_index) == choice:
+            selected_class = "selected"
+
+        # 👇 ボタンラップ（CSS用）
+        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
+
         if st.button(choice, key=f"{q_index}_{choice}"):
+
+            # 選択保存
+            st.session_state.selected[q_index] = choice
+
             st.session_state.history.append(secs)
             for sec in secs:
                 st.session_state.scores[sec] += 1
+
             st.session_state.q_index += 1
             st.rerun()
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
             for sec in last_secs:
                 st.session_state.scores[sec] -= 1
+
             st.session_state.q_index -= 1
             st.rerun()
 
@@ -163,4 +184,5 @@ else:
         st.session_state.q_index = 0
         st.session_state.scores = {k:0 for k in st.session_state.scores}
         st.session_state.history = []
+        st.session_state.selected = {}
         st.rerun()
