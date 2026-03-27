@@ -10,20 +10,24 @@ def set_bg(image_file):
     <style>
 
     html, body, .stApp {{
-        height: 100%;
         margin: 0;
+        padding: 0;
+        height: 100%;
     }}
 
     .stApp {{
         background-image: url("data:image/png;base64,{img}");
         background-size: cover;
-        background-position: center;
+        background-position: center center;
+        background-repeat: no-repeat;
         background-attachment: fixed;
     }}
 
     .stApp::before {{
         content: "";
         position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         background: rgba(0,0,0,0.4);
@@ -31,50 +35,53 @@ def set_bg(image_file):
     }}
 
     .block-container {{
-        max-width: 720px;
+        max-width: 700px;
         margin: 60px auto;
-        padding: 40px 30px;
-        background: rgba(255,255,255,0.85);
+        padding: 40px;
+        background: rgba(255,255,255,0.88);
         backdrop-filter: blur(10px);
         border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }}
 
     header, footer {{
         visibility: hidden;
     }}
 
-    /* 選択肢 */
-    .choice-btn > button {{
-        width: 90%;
-        margin: 10px auto;
-        display: block;
-        height: 60px;
-        border-radius: 999px;
-        border: none !important;
-        background: transparent !important;
-        font-size: 18px;
-        text-align: center;
-    }}
-
-    .choice-btn.selected > button {{
-        background: rgba(120,160,255,0.85) !important;
-        color: white !important;
-    }}
-
-    /* 👇 ナビ全体 */
-    .nav-wrap {{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-    }}
-
-    .nav-btn {{
-        width: 48%;
-    }}
-
-    .nav-btn button {{
+    /* ボタン */
+    div.stButton {{
         width: 100%;
-        height: 45px;
+    }}
+
+    div.stButton > button {{
+        width: calc(100% + 60px) !important;
+        margin-left: -30px;
+        margin-right: -30px;
+
+        height: 55px;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        color: black !important;
+        font-size: 16px;
+        text-align: left;
+        padding-left: 20px;
+
+        margin-top: 6px;
+        margin-bottom: 6px;
+
+        transition: 0.2s;
+        border-radius: 10px;
+    }}
+
+    div.stButton > button:hover {{
+        background: rgba(255,255,255,0.6) !important;
+    }}
+
+    div.stButton.selected > button {{
+        background: rgba(100,150,255,0.65) !important;
+        color: white !important;
     }}
 
     </style>
@@ -95,50 +102,44 @@ if "history" not in st.session_state:
 if "selected" not in st.session_state:
     st.session_state.selected = {}
 
-# ---------- 質問（増量版） ----------
+# ---------- データ ----------
+descriptions = {
+    "舞台": "ものづくりが好きで、形にする達成感を大事にするタイプ！",
+    "音響": "音にこだわり、空間を演出するセンスの持ち主！",
+    "照明": "光で世界観を作る、演出の魔法使いタイプ！",
+    "映像": "クリエイティブに表現するのが得意なタイプ！",
+    "衣装": "細部までこだわる美意識の高いタイプ！",
+    "小道具": "職人肌で、リアルな世界を支えるタイプ！",
+    "制作": "全体をまとめるリーダー気質タイプ！",
+    "Web": "デジタルで魅せる発信力のあるタイプ！",
+    "役者": "感情表現が豊かで、人前に立つのが得意なタイプ！"
+}
+
 questions = [
     ("どんな作業が好き？", {
-        "体を動かす": ["舞台","小道具"],
-        "機材いじり": ["音響","照明"],
-        "デザイン": ["映像","Web"],
-        "人と関わる": ["役者","制作"]
+        "体を動かす": ["舞台", "小道具"],
+        "機材いじり": ["音響", "照明"],
+        "デザイン": ["映像", "Web"],
+        "人と関わる": ["役者", "制作"]
     }),
     ("得意なことは？", {
-        "細かい作業": ["衣装","小道具"],
-        "音や光": ["音響","照明"],
-        "企画する": ["制作"],
-        "表現する": ["役者"]
+        "細かい作業": ["衣装", "小道具"],
+        "音や光": ["音響", "照明"],
+        "企画": ["制作"],
+        "表現": ["役者"]
     }),
-    ("どんな時に楽しい？", {
-        "完成した瞬間": ["舞台","小道具"],
-        "音や光がハマる時": ["音響","照明"],
-        "作品を作る時": ["映像","Web"],
-        "人と関わる時": ["役者","制作"]
-    }),
-    ("性格はどっち？", {
-        "コツコツ型": ["衣装","小道具"],
-        "クリエイティブ型": ["映像","Web"],
-        "リーダー型": ["制作"],
-        "目立つのが好き": ["役者"]
-    }),
-    ("好きな役割は？", {
-        "裏で支える": ["舞台","小道具","衣装"],
-        "技術で支える": ["音響","照明"],
-        "発信する": ["Web","映像"],
-        "前に出る": ["役者"]
-    })
 ]
 
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-st.markdown("<h1 style='text-align:center;'>🎭 セクション適性診断</h1>", unsafe_allow_html=True)
+st.markdown("## 🎭 セクション適性診断")
 
 if q_index < len(questions):
     q, choices = questions[q_index]
 
-    st.markdown(f"<p style='text-align:center;'>{q_index+1} / {len(questions)} 問</p>", unsafe_allow_html=True)
-    st.markdown(f"<h2 style='text-align:center;'>Q{q_index+1}. {q}</h2>", unsafe_allow_html=True)
+    st.caption(f"{q_index+1} / {len(questions)} 問")
+    st.markdown(f"### Q{q_index+1}. {q}")
 
     for choice, secs in choices.items():
 
@@ -146,36 +147,50 @@ if q_index < len(questions):
         if st.session_state.selected.get(q_index) == choice:
             selected_class = "selected"
 
-        st.markdown(f'<div class="choice-btn {selected_class}">', unsafe_allow_html=True)
+        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
 
         if st.button(choice, key=f"{q_index}_{choice}"):
+
             st.session_state.selected[q_index] = choice
+
+            st.session_state.history.append(secs)
+            for sec in secs:
+                st.session_state.scores[sec] += 1
+
+            st.session_state.q_index += 1
+            st.rerun()
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # 👇 ナビ（完全固定レイアウト）
-    st.markdown('<div class="nav-wrap">', unsafe_allow_html=True)
+    if q_index > 0:
+        if st.button("← 戻る"):
+            last_secs = st.session_state.history.pop()
+            for sec in last_secs:
+                st.session_state.scores[sec] -= 1
 
-    col1, col2 = st.columns([1,1])
-
-    with col1:
-        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-        if q_index > 0:
-            if st.button("← 戻る"):
-                st.session_state.q_index -= 1
-                st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    with col2:
-        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-        if st.button("次へ →"):
-            st.session_state.q_index += 1
+            st.session_state.q_index -= 1
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
 
     st.progress((q_index + 1) / len(questions))
 
 else:
-    st.markdown("<h2 style='text-align:center;'>🎉 診断結果</h2>", unsafe_allow_html=True)
+    st.markdown("## 🎉 診断結果")
+
+    sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
+    top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
+
+    st.markdown(f"### {top1} & {top2} タイプ！")
+
+    st.markdown(f"""
+    <div style="background:rgba(255,255,255,0.75); padding:20px; border-radius:15px;">
+    <b>{top1}</b>：{descriptions[top1]}<br><br>
+    <b>{top2}</b>：{descriptions[top2]}
+    </div>
+    """, unsafe_allow_html=True)
+
+    if st.button("もう一度"):
+        st.session_state.q_index = 0
+        st.session_state.scores = {k:0 for k in st.session_state.scores}
+        st.session_state.history = []
+        st.session_state.selected = {}
+        st.rerun()
