@@ -15,6 +15,19 @@ if "scores" not in st.session_state:
         "衣装":0,"小道具":0,"制作":0,"Web":0,"役者":0
     }
 
+# ===== タイプ定義 =====
+TYPES = {
+    "舞台":"現場職人タイプ",
+    "音響":"テクニカル職人タイプ",
+    "照明":"空間演出家タイプ",
+    "映像":"クリエイタータイプ",
+    "衣装":"デザイナータイプ",
+    "小道具":"クラフト職人タイプ",
+    "制作":"プロデューサータイプ",
+    "Web":"デジタル職人タイプ",
+    "役者":"表現者タイプ"
+}
+
 # ===== 背景画像 =====
 def get_base64(file_path):
     with open(file_path, "rb") as f:
@@ -29,65 +42,59 @@ st.markdown(f"""
 .stApp {{
     background-image: url("data:image/jpg;base64,{img}");
     background-size: cover;
-    background-position: center;
 }}
 
 .stApp::before {{
-    content: "";
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: -1;
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:-1;
 }}
 
 @keyframes fadeIn {{
-    from {{ opacity: 0; transform: translateY(30px); }}
-    to {{ opacity: 1; transform: translateY(0); }}
-}}
-
-@keyframes slideIn {{
-    from {{ opacity: 0; transform: translateX(40px); }}
-    to {{ opacity: 1; transform: translateX(0); }}
+    from {{opacity:0; transform:translateY(30px);}}
+    to {{opacity:1; transform:translateY(0);}}
 }}
 
 .card {{
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.92);
     padding: 30px;
     border-radius: 20px;
     max-width: 700px;
     margin: 30px auto;
     box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    animation: fadeIn 0.6s ease;
+    animation: fadeIn 0.5s;
     text-align: center;
 }}
 
-div[data-testid="stRadio"] {{
+/* 👇 質問＋選択肢を一体化 */
+.question-box {{
     background: rgba(255,255,255,0.92);
-    padding: 25px;
+    padding: 30px;
     border-radius: 20px;
     max-width: 700px;
-    margin: 20px auto;
+    margin: 30px auto;
     box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    animation: slideIn 0.4s ease;
+    animation: fadeIn 0.5s;
+}}
+
+/* radioを中に溶け込ませる */
+div[data-testid="stRadio"] {{
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
 }}
 
 div[data-testid="stRadio"] label {{
     color: black !important;
     padding: 10px;
     border-radius: 10px;
-    transition: 0.2s;
 }}
 
 div[data-testid="stRadio"] label:hover {{
     background: rgba(0,0,0,0.1);
-}}
-
-div.stButton > button {{
-    width: 700px;
-    display: block;
-    margin: 10px auto;
-    border-radius: 12px;
 }}
 
 </style>
@@ -118,12 +125,10 @@ QUESTIONS = [
 # ===== ローディング =====
 if not st.session_state.started:
     st.markdown('<div class="card"><h2>Loading...</h2></div>', unsafe_allow_html=True)
-
     bar = st.progress(0)
     for i in range(101):
         time.sleep(0.01)
         bar.progress(i)
-
     st.session_state.started = True
     st.rerun()
 
@@ -135,28 +140,26 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ===== 進捗 =====
-progress = st.session_state.q_index / len(QUESTIONS)
-st.progress(progress)
+st.progress(st.session_state.q_index / len(QUESTIONS))
 
 # ===== 質問 =====
 if st.session_state.q_index < len(QUESTIONS):
 
     q = QUESTIONS[st.session_state.q_index]
 
-    st.markdown(f"""
-    <div class="card">
-    <h3>Q{st.session_state.q_index+1}. {q['question']}</h3>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="question-box">', unsafe_allow_html=True)
+
+    st.markdown(f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>", unsafe_allow_html=True)
 
     choice = st.radio(
         "",
         [c["text"] for c in q["choices"]],
-        index=None,  # ★これが最重要
+        index=None,
         key=st.session_state.q_index
     )
 
-    # 自動遷移
+    st.markdown('</div>', unsafe_allow_html=True)
+
     if choice is not None:
         time.sleep(0.2)
 
@@ -176,14 +179,15 @@ else:
         reverse=True
     )
 
-    top1 = sorted_scores[0][0]
-    top2 = sorted_scores[1][0]
+    top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
     st.markdown(f"""
     <div class="card">
     <h2>
     あなたに向いているのは…<br><br>
-    <b>{top1}</b><br>＆<br><b>{top2}</b>
+    <b>{top1}</b>（{TYPES[top1]}）<br><br>
+    ＆<br><br>
+    <b>{top2}</b>（{TYPES[top2]}）
     </h2>
     </div>
     """, unsafe_allow_html=True)
