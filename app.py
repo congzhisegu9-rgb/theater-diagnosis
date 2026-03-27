@@ -199,13 +199,13 @@ def set_bg(image_file):
 
     /* ===== 中央寄せ ===== */
 　/* ===== 中央寄せ ===== */
-.choice-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 180px);
-}
+     .choice-wrapper {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         height: calc(100vh - 180px);
+     }   
 
 .choice-wrapper .stButton {
     width: 70%;
