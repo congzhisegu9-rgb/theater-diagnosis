@@ -71,10 +71,14 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン ===== */
+    /* ===== ボタン（完全中央揃え） ===== */
     div.stButton > button {{
         width: 100%;
         height: 50px;
+
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
 
         background: transparent !important;
         border: none !important;
@@ -83,10 +87,10 @@ def set_bg(image_file):
         font-size: 18px;
         color: #333;
 
-        text-align: center;
-
         margin: 12px 0;
         border-radius: 8px;
+
+        letter-spacing: 0.05em;
 
         transition: all 0.2s ease;
     }}
@@ -98,6 +102,13 @@ def set_bg(image_file):
     div.stButton.selected > button {{
         background: rgba(120,150,255,0.25) !important;
         font-weight: 600;
+    }}
+
+    /* テキスト強制中央 */
+    div.stButton > button p {{
+        width: 100%;
+        text-align: center !important;
+        margin: 0 !important;
     }}
 
     /* ===== 進捗 ===== */
@@ -194,19 +205,16 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-# タイトル
 st.markdown(f"""
 <div class="title">🎭 セクション適性診断</div>
 <div class="subtitle">{q_index+1} / {len(questions)} 問</div>
 """, unsafe_allow_html=True)
 
-# 質問表示
 if q_index < len(questions):
     q, choices = questions[q_index]
 
     st.markdown(f'<div class="question">Q{q_index+1}. {q}</div>', unsafe_allow_html=True)
 
-    # ===== 中央寄せラッパー =====
     st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
 
     for choice, secs in choices.items():
@@ -232,7 +240,6 @@ if q_index < len(questions):
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 戻る
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
@@ -244,7 +251,6 @@ if q_index < len(questions):
 
     st.progress((q_index + 1) / len(questions))
 
-# ---------- 結果 ----------
 else:
     st.markdown('<div class="title">🎉 診断結果</div>', unsafe_allow_html=True)
 
