@@ -1,42 +1,70 @@
 import streamlit as st
 import base64
 
-# ---------- 背景 ----------
+# ---------- 背景設定 ----------
 def set_bg(image_file):
     with open(image_file, "rb") as f:
         img = base64.b64encode(f.read()).decode()
+
     st.markdown(f"""
     <style>
+    /* 背景画像 */
     .stApp {{
         background-image: url("data:image/png;base64,{img}");
         background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }}
 
-    /* 白カード */
+    /* 背景を少し暗くする */
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.25);
+        z-index: -1;
+    }}
+
+    /* Streamlitの白背景を消す */
+    .main {{
+        background: transparent;
+    }}
+    .block-container {{
+        background: transparent;
+        padding-top: 50px;
+    }}
+
+    /* カード */
     .card {{
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 30px;
+        background-color: rgba(255,255,255,0.92);
+        padding: 35px;
         border-radius: 20px;
         color: black;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        max-width: 600px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        max-width: 650px;
         margin: auto;
     }}
 
+    /* タイトル */
     .title {{
         text-align: center;
-        font-size: 32px;
+        font-size: 30px;
         font-weight: bold;
         margin-bottom: 20px;
     }}
+
     </style>
     """, unsafe_allow_html=True)
 
 set_bg("prism-logo.png")
 
-# ---------- 状態 ----------
+# ---------- 状態管理 ----------
 if "q_index" not in st.session_state:
     st.session_state.q_index = 0
+
 if "scores" not in st.session_state:
     st.session_state.scores = {
         "舞台":0,"音響":0,"照明":0,"映像":0,"衣装":0,
@@ -63,23 +91,63 @@ questions = [
         "デザイン": ["映像", "Web"],
         "人と関わる": ["役者", "制作"]
     }),
-    # （省略OK：他の質問そのまま）
+    ("得意なことは？", {
+        "細かい作業": ["衣装", "小道具"],
+        "音や光": ["音響", "照明"],
+        "企画": ["制作"],
+        "表現": ["役者"]
+    }),
+    ("惹かれる役割は？", {
+        "形を作る": ["舞台"],
+        "雰囲気作り": ["照明", "音響"],
+        "世界観": ["衣装", "映像"],
+        "まとめ役": ["制作"]
+    }),
+    ("作業スタイルは？", {
+        "コツコツ": ["衣装", "小道具"],
+        "本番集中": ["音響", "照明", "役者"],
+        "PC作業": ["Web", "映像"],
+        "人と話す": ["制作"]
+    }),
+    ("興味あるのは？", {
+        "DIY": ["舞台", "小道具"],
+        "音楽": ["音響"],
+        "光": ["照明"],
+        "ファッション": ["衣装"]
+    }),
+    ("ワクワクする瞬間は？", {
+        "完成": ["舞台"],
+        "演出が決まる": ["音響", "照明"],
+        "作品完成": ["映像", "衣装"],
+        "反応": ["役者", "制作"]
+    }),
+    ("性格は？", {
+        "職人": ["舞台", "小道具", "衣装"],
+        "冷静": ["音響", "照明"],
+        "クリエイティブ": ["映像", "Web"],
+        "社交的": ["制作", "役者"]
+    }),
+    ("やってみたいのは？", {
+        "セット作り": ["舞台"],
+        "操作": ["音響", "照明"],
+        "編集・制作": ["映像", "Web"],
+        "演技": ["役者"]
+    })
 ]
 
 # ---------- UI ----------
-st.markdown('<div class="title">🎭 セクション適性診断</div>', unsafe_allow_html=True)
-
 q_index = st.session_state.q_index
 
 # 進捗バー
-progress = (q_index) / len(questions)
-st.progress(progress)
+st.progress(q_index / len(questions))
 
 # ---------- 質問 ----------
 if q_index < len(questions):
     q, choices = questions[q_index]
 
     st.markdown('<div class="card">', unsafe_allow_html=True)
+
+    st.markdown('<div class="title">🎭 セクション適性診断</div>', unsafe_allow_html=True)
 
     st.subheader(f"Q{q_index+1}. {q}")
 
@@ -97,7 +165,7 @@ if q_index < len(questions):
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    st.subheader("🎉 診断結果")
+    st.markdown('<div class="title">🎭 診断結果</div>', unsafe_allow_html=True)
 
     sorted_scores = sorted(
         st.session_state.scores.items(),
