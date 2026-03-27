@@ -46,25 +46,43 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ボタン */
-    div.stButton > button {{
-        width: 100% !important;
-        height: 55px;
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        color: black !important;
-        font-size: 16px;
-        text-align: left;
-        padding-left: 10px;
-        margin: 6px 0;
-        transition: 0.2s;
-    }}
+ /* ボタン */
+div.stButton {
+    width: 100%;
+}
 
-    /* ホバー */
-    div.stButton > button:hover {{
-        background: rgba(255,255,255,0.6) !important;
-    }}
+/* 本体 */
+div.stButton > button {
+    width: calc(100% + 40px) !important;   /* ← 広げる */
+    margin-left: -20px;                    /* ← 左にはみ出し */
+    margin-right: -20px;                   /* ← 右にはみ出し */
+
+    height: 55px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    color: black !important;
+    font-size: 16px;
+    text-align: left;
+    padding-left: 20px;
+
+    margin-top: 6px;
+    margin-bottom: 6px;
+
+    transition: 0.2s;
+}
+
+/* ホバー */
+div.stButton > button:hover {
+    background: rgba(255,255,255,0.6) !important;
+}
+
+/* 選択状態 */
+div.stButton.selected > button {
+    background: rgba(100,150,255,0.6) !important;
+    color: white !important;
+}
 
     /* 選択済み */
     div.stButton.selected > button {{
