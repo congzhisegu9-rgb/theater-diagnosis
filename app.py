@@ -44,77 +44,171 @@ def set_bg(image_file):
         z-index: 9999;
     }}
 
-    /* ===== 三角形コンテナ ===== */
+    /* ===== 正三角形 ===== */
     .triangle {{
-        width: 140px;
-        height: 120px;
         position: relative;
+        width: 150px;
+        height: calc(150px * 0.866); /* √3/2 = 0.866 */
     }}
 
-    /* 各辺 */
-    .line {{
+    .edge {{
         position: absolute;
+        height: 4px;
         background: rgba(255,255,255,0.2);
+        transform-origin: left center;
     }}
 
     /* 下辺 */
-    .line1 {{
-        width: 100%;
-        height: 4px;
+    .e1 {{
+        width: 150px;
         bottom: 0;
         left: 0;
-        animation: glow1 1.5s infinite;
+        animation: glow1 1.8s infinite;
     }}
 
-    /* 左斜辺 */
-    .line2 {{
-        width: 4px;
-        height: 100%;
+    /* 左辺（60度） */
+    .e2 {{
+        width: 150px;
+        bottom: 0;
+        left: 0;
         transform: rotate(60deg);
-        transform-origin: bottom left;
-        bottom: 0;
-        left: 0;
-        animation: glow2 1.5s infinite;
+        animation: glow2 1.8s infinite;
     }}
 
-    /* 右斜辺 */
-    .line3 {{
-        width: 4px;
-        height: 100%;
-        transform: rotate(-60deg);
-        transform-origin: bottom right;
+    /* 右辺（-60度） */
+    .e3 {{
+        width: 150px;
         bottom: 0;
         right: 0;
-        animation: glow3 1.5s infinite;
+        transform-origin: right center;
+        transform: rotate(-60deg);
+        animation: glow3 1.8s infinite;
     }}
 
-    /* アニメーション */
+    /* ===== 光るアニメーション ===== */
     @keyframes glow1 {{
-        0%, 100% {{ background: rgba(255,255,255,0.2); }}
-        33% {{ background: white; }}
+        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        20% {{ background: white; }}
     }}
 
     @keyframes glow2 {{
-        0%, 100% {{ background: rgba(255,255,255,0.2); }}
-        66% {{ background: white; }}
+        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        50% {{ background: white; }}
     }}
 
     @keyframes glow3 {{
-        0%, 100% {{ background: rgba(255,255,255,0.2); }}
-        100% {{ background: white; }}
+        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        80% {{ background: white; }}
     }}
 
-    /* ローディング文字 */
     .loading-text {{
-        margin-top: 25px;
+        margin-top: 28px;
         color: white;
         font-size: 22px;
         letter-spacing: 0.2em;
     }}
 
-    /* ===== 通常UI（非表示制御） ===== */
-    .hidden {{
-        display: none;
+    /* ===== ここから元UI ===== */
+
+    .block-container {{
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 28px;
+
+        background: rgba(255,255,255,0.92);
+        border-radius: 14px;
+
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        backdrop-filter: blur(6px);
+    }}
+
+    header, footer {{
+        visibility: hidden;
+    }}
+
+    .title {{
+        text-align: center;
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        line-height: 1.05;
+    }}
+
+    .subtitle {{
+        text-align: center;
+        color: #888;
+        margin-bottom: 6px;
+        font-size: 14px;
+    }}
+
+    .question {{
+        text-align: center;
+        font-size: 30px;
+        font-weight: 600;
+        margin: 10px 0;
+        line-height: 1.1;
+    }}
+
+    .choice-wrapper {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }}
+
+    .choice-wrapper .stButton {{
+        width: 70%;
+    }}
+
+    div.stButton {{
+        margin: 0 !important;
+        padding: 0 !important;
+    }}
+
+    div.stButton > button {{
+        width: 100%;
+        height: 52px;
+
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        font-size: 32px;
+        font-weight: 800;
+        color: #333;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border-radius: 8px;
+
+        letter-spacing: 0.05em;
+        line-height: 1.0;
+
+        transition: all 0.12s ease;
+    }}
+
+    div.stButton > button:hover {{
+        background: rgba(0,0,0,0.06) !important;
+        transform: scale(1.02);
+    }}
+
+    div.stButton.selected > button {{
+        background: rgba(120,150,255,0.25) !important;
+    }}
+
+    div.stButton > button p {{
+        width: 100%;
+        text-align: center !important;
+        margin: 0 !important;
+        line-height: 1.0 !important;
+    }}
+
+    .stProgress > div > div {{
+        background-color: #6c8cff;
     }}
 
     </style>
@@ -123,15 +217,15 @@ def set_bg(image_file):
 
 set_bg("prism-logo.png")
 
-# ---------- ローディング表示 ----------
+# ---------- ローディング ----------
 if st.session_state.loading:
 
     st.markdown("""
     <div class="loading-screen">
         <div class="triangle">
-            <div class="line line1"></div>
-            <div class="line line2"></div>
-            <div class="line line3"></div>
+            <div class="edge e1"></div>
+            <div class="edge e2"></div>
+            <div class="edge e3"></div>
         </div>
         <div class="loading-text">Loading...</div>
     </div>
@@ -239,18 +333,35 @@ if q_index < len(questions):
 
     for choice, secs in choices.items():
 
+        selected_class = ""
+        if st.session_state.selected.get(q_index) == choice:
+            selected_class = "selected"
+
+        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
+
         if st.button(choice, key=f"{q_index}_{choice}"):
 
             st.session_state.selected[q_index] = choice
-            st.session_state.history.append(secs)
 
+            st.session_state.history.append(secs)
             for sec in secs:
                 st.session_state.scores[sec] += 1
 
             st.session_state.q_index += 1
             st.rerun()
 
+        st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown('</div>', unsafe_allow_html=True)
+
+    if q_index > 0:
+        if st.button("← 戻る"):
+            last_secs = st.session_state.history.pop()
+            for sec in last_secs:
+                st.session_state.scores[sec] -= 1
+
+            st.session_state.q_index -= 1
+            st.rerun()
 
     st.progress((q_index + 1) / len(questions))
 
