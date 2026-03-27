@@ -25,8 +25,8 @@ def set_bg(image_file):
     /* ===== 中央カード ===== */
     .block-container {{
         max-width: 600px;
-        margin: 40px auto;
-        padding: 40px 40px;
+        margin: 30px auto;
+        padding: 35px 35px;
 
         background: rgba(255,255,255,0.92);
         border-radius: 16px;
@@ -44,23 +44,23 @@ def set_bg(image_file):
         text-align: center;
         font-size: 42px;
         font-weight: 700;
-        margin-bottom: 6px;
-        line-height: 1.2;
+        margin-bottom: 4px;
+        line-height: 1.1;
     }}
 
     .subtitle {{
         text-align: center;
         color: #888;
-        margin-bottom: 16px;
-        font-size: 16px;
+        margin-bottom: 10px;
+        font-size: 15px;
     }}
 
     .question {{
         text-align: center;
         font-size: 30px;
         font-weight: 600;
-        margin: 20px 0;
-        line-height: 1.3;
+        margin: 14px 0;
+        line-height: 1.2;
         letter-spacing: 0.03em;
     }}
 
@@ -75,10 +75,10 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン（間隔詰め版） ===== */
+    /* ===== ボタン（超詰め版） ===== */
     div.stButton > button {{
         width: 100%;
-        height: 56px;
+        height: 48px;  /* ← 少し圧縮 */
 
         display: flex !important;
         align-items: center;
@@ -92,18 +92,18 @@ def set_bg(image_file):
         font-weight: 700;
         color: #333;
 
-        margin: 2px 0;   /* ← ここがポイント（6px → 2px） */
+        margin: 0px 0;   /* ← ほぼゼロ間隔 */
         border-radius: 10px;
 
         letter-spacing: 0.06em;
 
-        transition: all 0.2s ease;
+        transition: all 0.15s ease;
     }}
 
     /* ホバー */
     div.stButton > button:hover {{
-        background: rgba(0,0,0,0.05) !important;
-        transform: scale(1.03);
+        background: rgba(0,0,0,0.06) !important;
+        transform: scale(1.02);
     }}
 
     div.stButton.selected > button {{
