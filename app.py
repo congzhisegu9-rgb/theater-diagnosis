@@ -198,15 +198,18 @@ def set_bg(image_file):
     }}
 
     /* ===== 中央寄せ ===== */
-　　/* ===== 中央寄せ ===== */
-　　.choice-wrapper {
-    　　display: flex;
-    　　flex-direction: column;
-    　　align-items: center;
-    　　justify-content: center;
+　/* ===== 中央寄せ ===== */
+.choice-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 180px);
+}
 
-    　　height: calc(100vh - 180px);  /* ←これでちゃんと中央に来る */
-　　}
+.choice-wrapper .stButton {
+    width: 70%;
+}
 
 
     /* ===== ボタン（超デカ文字） ===== */
