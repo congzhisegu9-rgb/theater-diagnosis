@@ -1,5 +1,10 @@
 import streamlit as st
 import base64
+import time
+
+# ---------- 初回ローディング ----------
+if "loading" not in st.session_state:
+    st.session_state.loading = True
 
 # ---------- 背景 ----------
 def set_bg(image_file):
@@ -22,112 +27,31 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== 中央カード ===== */
-    .block-container {{
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 28px;
-
-        background: rgba(255,255,255,0.92);
-        border-radius: 14px;
-
-        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-        backdrop-filter: blur(6px);
-    }}
-
-    header, footer {{
-        visibility: hidden;
-    }}
-
-    /* ===== タイトル ===== */
-    .title {{
-        text-align: center;
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 2px;
-        line-height: 1.05;
-    }}
-
-    .subtitle {{
-        text-align: center;
-        color: #888;
-        margin-bottom: 6px;
-        font-size: 14px;
-    }}
-
-    .question {{
-        text-align: center;
-        font-size: 30px;
-        font-weight: 600;
-        margin: 10px 0;
-        line-height: 1.1;
-    }}
-
-    /* ===== 中央寄せ ===== */
-    .choice-wrapper {{
+    /* ===== ローディング ===== */
+    .loading {{
+        height: 100vh;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-    }}
-
-    .choice-wrapper .stButton {{
-        width: 70%;
-    }}
-
-    /* ===== ボタン（超デカ文字） ===== */
-    div.stButton {{
-        margin: 0 !important;
-        padding: 0 !important;
-    }}
-
-    div.stButton > button {{
-        width: 100%;
-        height: 52px;  /* ← 少し戻して押しやすく */
-
-        display: flex !important;
-        align-items: center;
         justify-content: center;
-
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-
-        font-size: 32px;   /* ← ここが最大強化ポイント */
-        font-weight: 800;  /* ← 超太字 */
-        color: #333;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        border-radius: 8px;
-
-        letter-spacing: 0.05em;
-        line-height: 1.0;
-
-        transition: all 0.12s ease;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
     }}
 
-    /* ホバー */
-    div.stButton > button:hover {{
-        background: rgba(0,0,0,0.06) !important;
-        transform: scale(1.02);
+    .spinner {{
+        border: 6px solid rgba(255,255,255,0.2);
+        border-top: 6px solid white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
     }}
 
-    div.stButton.selected > button {{
-        background: rgba(120,150,255,0.25) !important;
-    }}
-
-    /* テキスト中央 */
-    div.stButton > button p {{
-        width: 100%;
-        text-align: center !important;
-        margin: 0 !important;
-        line-height: 1.0 !important;
-    }}
-
-    /* ===== 進捗 ===== */
-    .stProgress > div > div {{
-        background-color: #6c8cff;
+    @keyframes spin {{
+        0% {{ transform: rotate(0deg); }}
+        100% {{ transform: rotate(360deg); }}
     }}
 
     </style>
@@ -135,6 +59,21 @@ def set_bg(image_file):
 
 
 set_bg("prism-logo.png")
+
+# ---------- ローディング表示 ----------
+if st.session_state.loading:
+
+    st.markdown("""
+    <div class="loading">
+        <div class="spinner"></div>
+        Loading...
+    </div>
+    """, unsafe_allow_html=True)
+
+    time.sleep(2)  # ← 表示時間（調整OK）
+
+    st.session_state.loading = False
+    st.rerun()
 
 # ---------- 状態 ----------
 sections = ["舞台","音響","照明","映像","宣伝美術","衣装","小道具","制作","Web","役者"]
@@ -219,29 +158,15 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-st.markdown(f"""
-<div class="title">🎭 セクション適性診断</div>
-<div class="subtitle">{q_index+1} / {len(questions)} 問</div>
-""", unsafe_allow_html=True)
+st.markdown(f"## 🎭 セクション適性診断")
 
 if q_index < len(questions):
     q, choices = questions[q_index]
 
-    st.markdown(f'<div class="question">Q{q_index+1}. {q}</div>', unsafe_allow_html=True)
-
-    st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
+    st.markdown(f"### Q{q_index+1}. {q}")
 
     for choice, secs in choices.items():
-
-        selected_class = ""
-        if st.session_state.selected.get(q_index) == choice:
-            selected_class = "selected"
-
-        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
-
-        if st.button(choice, key=f"{q_index}_{choice}"):
-
-            st.session_state.selected[q_index] = choice
+        if st.button(choice):
 
             st.session_state.history.append(secs)
             for sec in secs:
@@ -250,38 +175,12 @@ if q_index < len(questions):
             st.session_state.q_index += 1
             st.rerun()
 
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    if q_index > 0:
-        if st.button("← 戻る"):
-            last_secs = st.session_state.history.pop()
-            for sec in last_secs:
-                st.session_state.scores[sec] -= 1
-
-            st.session_state.q_index -= 1
-            st.rerun()
-
-    st.progress((q_index + 1) / len(questions))
-
 else:
-    st.markdown('<div class="title">🎉 診断結果</div>', unsafe_allow_html=True)
+    st.markdown("## 🎉 診断結果")
 
     sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
-    st.markdown(f"""
-    <div style="background:rgba(255,255,255,0.85); padding:20px; border-radius:12px; text-align:center;">
-    <h2>{top1} & {top2} タイプ！</h2>
-    <p><b>{top1}</b><br>{descriptions[top1]}</p>
-    <p><b>{top2}</b><br>{descriptions[top2]}</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(f"### {top1} & {top2} タイプ！")
 
-    if st.button("もう一度"):
-        st.session_state.q_index = 0
-        st.session_state.scores = {k:0 for k in sections}
-        st.session_state.history = []
-        st.session_state.selected = {}
-        st.rerun()
+    st.markdown(f"{descriptions[top1]}\n\n{descriptions[top2]}")
