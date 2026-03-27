@@ -22,16 +22,16 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== 中央カード ===== */
+    /* ===== 中央カード（さらに圧縮） ===== */
     .block-container {{
         max-width: 600px;
-        margin: 30px auto;
-        padding: 35px 35px;
+        margin: 20px auto;
+        padding: 28px 28px;
 
         background: rgba(255,255,255,0.92);
-        border-radius: 16px;
+        border-radius: 14px;
 
-        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         backdrop-filter: blur(6px);
     }}
 
@@ -42,26 +42,26 @@ def set_bg(image_file):
     /* ===== タイトル ===== */
     .title {{
         text-align: center;
-        font-size: 42px;
+        font-size: 40px;
         font-weight: 700;
-        margin-bottom: 4px;
-        line-height: 1.1;
+        margin-bottom: 2px;
+        line-height: 1.05;
     }}
 
     .subtitle {{
         text-align: center;
         color: #888;
-        margin-bottom: 10px;
-        font-size: 15px;
+        margin-bottom: 6px;
+        font-size: 14px;
     }}
 
     .question {{
         text-align: center;
-        font-size: 30px;
+        font-size: 28px;
         font-weight: 600;
-        margin: 14px 0;
-        line-height: 1.2;
-        letter-spacing: 0.03em;
+        margin: 10px 0;
+        line-height: 1.1;
+        letter-spacing: 0.02em;
     }}
 
     /* ===== 選択肢中央寄せ ===== */
@@ -75,10 +75,15 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン（超詰め版） ===== */
+    /* ===== ボタン（極限圧縮） ===== */
+    div.stButton {{
+        margin: 0 !important;
+        padding: 0 !important;
+    }}
+
     div.stButton > button {{
         width: 100%;
-        height: 48px;  /* ← 少し圧縮 */
+        height: 42px;  /* ← 限界まで削る */
 
         display: flex !important;
         align-items: center;
@@ -88,22 +93,25 @@ def set_bg(image_file):
         border: none !important;
         box-shadow: none !important;
 
-        font-size: 26px;
+        font-size: 25px;
         font-weight: 700;
         color: #333;
 
-        margin: 0px 0;   /* ← ほぼゼロ間隔 */
-        border-radius: 10px;
+        margin: 0 !important;
+        padding: 0 !important;
 
-        letter-spacing: 0.06em;
+        border-radius: 8px;
 
-        transition: all 0.15s ease;
+        letter-spacing: 0.05em;
+        line-height: 1.0;
+
+        transition: all 0.12s ease;
     }}
 
-    /* ホバー */
+    /* ホバー（控えめ） */
     div.stButton > button:hover {{
-        background: rgba(0,0,0,0.06) !important;
-        transform: scale(1.02);
+        background: rgba(0,0,0,0.05) !important;
+        transform: scale(1.015);
     }}
 
     div.stButton.selected > button {{
@@ -115,6 +123,7 @@ def set_bg(image_file):
         width: 100%;
         text-align: center !important;
         margin: 0 !important;
+        line-height: 1.0 !important;
     }}
 
     /* ===== 進捗 ===== */
