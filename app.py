@@ -15,7 +15,7 @@ if "scores" not in st.session_state:
         "衣装":0,"小道具":0,"制作":0,"Web":0,"役者":0
     }
 
-# ===== 背景画像 =====
+# ===== 背景 =====
 def get_base64(file_path):
     with open(file_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -37,47 +37,43 @@ st.markdown(f"""
     position:fixed;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.2); /* ← 薄くした */
     z-index:-1;
 }}
 
 @keyframes fadeIn {{
-    from {{opacity:0; transform:translateY(30px);}}
+    from {{opacity:0; transform:translateY(20px);}}
     to {{opacity:1; transform:translateY(0);}}
 }}
 
 /* タイトル・結果 */
 .card {{
-    background: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.9);
     padding: 30px;
     border-radius: 20px;
     max-width: 700px;
     margin: 30px auto;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    animation: fadeIn 0.5s;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     text-align: center;
+    animation: fadeIn 0.5s;
 }}
 
-/* 👇質問＋選択肢まとめてカード化（確実に効く方法） */
-div[data-testid="stRadio"] {{
+/* 👇質問全体カード */
+.q-card {{
     background: rgba(255,255,255,0.95);
     padding: 30px;
     border-radius: 20px;
     max-width: 700px;
-    margin: 10px auto 30px auto;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    animation: fadeIn 0.5s;
+    margin: 20px auto;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 0.4s;
 }}
 
-/* 質問タイトル */
-.question-title {{
-    text-align:center;
-    color:black;
-    margin-bottom:-10px;
-    font-size:20px;
+/* radioをカードに馴染ませる */
+div[data-testid="stRadio"] {{
+    margin-top: 15px;
 }}
 
-/* 選択肢 */
 div[data-testid="stRadio"] label {{
     color: black !important;
     padding: 10px;
@@ -85,7 +81,7 @@ div[data-testid="stRadio"] label {{
 }}
 
 div[data-testid="stRadio"] label:hover {{
-    background: rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.08);
 }}
 
 </style>
@@ -138,19 +134,20 @@ if st.session_state.q_index < len(QUESTIONS):
 
     q = QUESTIONS[st.session_state.q_index]
 
-    # 👇タイトル（カードの上にくっつける）
-    st.markdown(
-        f"<div class='question-title'>Q{st.session_state.q_index+1}. {q['question']}</div>",
-        unsafe_allow_html=True
-    )
+    # 👇ここで完全に囲う（これが正解）
+    with st.container():
+        st.markdown('<div class="q-card">', unsafe_allow_html=True)
 
-    # 👇選択肢（これ自体がカードになる）
-    choice = st.radio(
-        "",
-        [c["text"] for c in q["choices"]],
-        index=None,
-        key=st.session_state.q_index
-    )
+        st.markdown(f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>", unsafe_allow_html=True)
+
+        choice = st.radio(
+            "",
+            [c["text"] for c in q["choices"]],
+            index=None,
+            key=st.session_state.q_index
+        )
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
     if choice is not None:
         time.sleep(0.2)
