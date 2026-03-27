@@ -38,6 +38,7 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
+    /* 外側カード */
     .card {{
         background: rgba(255,255,255,0.95);
         padding: 30px;
@@ -46,13 +47,24 @@ def set_bg(image_file):
         margin: 40px auto;
     }}
 
-    .choice-btn button {{
-        width: 100%;
-        margin: 8px 0;
-        border-radius: 10px;
-        height: 50px;
-        font-size: 16px;
+    /* 質問エリア */
+    .question-box {{
+        background: rgba(255,255,255,0.9);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 15px;
+        border: 1px solid rgba(0,0,0,0.1);
     }}
+
+    /* ボタンを横いっぱいに */
+    div.stButton > button {{
+        width: 100%;
+        height: 55px;
+        border-radius: 12px;
+        font-size: 16px;
+        margin: 6px 0;
+    }}
+
     </style>
     """, unsafe_allow_html=True)
 
@@ -65,7 +77,6 @@ if "q_index" not in st.session_state:
 if "scores" not in st.session_state:
     st.session_state.scores = {k:0 for k in ["舞台","音響","照明","映像","衣装","小道具","制作","Web","役者"]}
 
-# 👇 履歴（戻る用）
 if "history" not in st.session_state:
     st.session_state.history = []
 
@@ -95,42 +106,6 @@ questions = [
         "企画": ["制作"],
         "表現": ["役者"]
     }),
-    ("惹かれる役割は？", {
-        "形を作る": ["舞台"],
-        "雰囲気作り": ["照明", "音響"],
-        "世界観": ["衣装", "映像"],
-        "まとめ役": ["制作"]
-    }),
-    ("作業スタイルは？", {
-        "コツコツ": ["衣装", "小道具"],
-        "本番集中": ["音響", "照明", "役者"],
-        "PC作業": ["Web", "映像"],
-        "人と話す": ["制作"]
-    }),
-    ("興味あるのは？", {
-        "DIY": ["舞台", "小道具"],
-        "音楽": ["音響"],
-        "光": ["照明"],
-        "ファッション": ["衣装"]
-    }),
-    ("ワクワクする瞬間は？", {
-        "完成": ["舞台"],
-        "演出が決まる": ["音響", "照明"],
-        "作品完成": ["映像", "衣装"],
-        "反応": ["役者", "制作"]
-    }),
-    ("性格は？", {
-        "職人": ["舞台", "小道具", "衣装"],
-        "冷静": ["音響", "照明"],
-        "クリエイティブ": ["映像", "Web"],
-        "社交的": ["制作", "役者"]
-    }),
-    ("やってみたいのは？", {
-        "セット作り": ["舞台"],
-        "操作": ["音響", "照明"],
-        "編集・制作": ["映像", "Web"],
-        "演技": ["役者"]
-    })
 ]
 
 # ---------- UI ----------
@@ -144,28 +119,28 @@ if q_index < len(questions):
     st.markdown("## 🎭 セクション適性診断")
     st.caption(f"{q_index+1} / {len(questions)} 問")
 
-    st.markdown(f"### Q{q_index+1}. {q}")
+    # 👇 同一ボックス
+    with st.container():
+        st.markdown('<div class="question-box">', unsafe_allow_html=True)
 
-    # 選択肢ボタン
-    for choice, secs in choices.items():
-        if st.button(choice, key=f"{q_index}_{choice}"):
-            # 履歴保存
-            st.session_state.history.append(secs)
+        st.subheader(f"Q{q_index+1}. {q}")
 
-            for sec in secs:
-                st.session_state.scores[sec] += 1
+        for choice, secs in choices.items():
+            if st.button(choice, key=f"{q_index}_{choice}"):
+                st.session_state.history.append(secs)
+                for sec in secs:
+                    st.session_state.scores[sec] += 1
+                st.session_state.q_index += 1
+                st.rerun()
 
-            st.session_state.q_index += 1
-            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # 戻るボタン
+    # 戻る
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
-
             for sec in last_secs:
                 st.session_state.scores[sec] -= 1
-
             st.session_state.q_index -= 1
             st.rerun()
 
@@ -173,7 +148,6 @@ if q_index < len(questions):
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- 結果 ----------
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
@@ -182,11 +156,7 @@ else:
     sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
-    st.markdown(f"""
-    <div style="text-align:center; font-size:28px;">
-    {top1} & {top2} タイプ！
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(f"### {top1} & {top2} タイプ！")
 
     st.markdown(f"""
     <div style="background:#f5f5f5; padding:20px; border-radius:10px;">
