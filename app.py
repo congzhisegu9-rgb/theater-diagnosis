@@ -44,48 +44,53 @@ def set_bg(image_file):
         z-index: 9999;
     }}
 
-    /* ===== 正三角形（上向き） ===== */
+    /* ===== 完全な正三角形 ===== */
     .triangle {{
+        width: 160px;
+        height: 140px;
+
         position: relative;
-        width: 150px;
-        height: calc(150px * 0.866);
+
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }}
 
-    .edge {{
+    /* 辺の線 */
+    .line {{
         position: absolute;
-        height: 4px;
         background: rgba(255,255,255,0.2);
-        transform-origin: left center;
     }}
 
     /* 下辺 */
-    .e1 {{
-        width: 150px;
-        top: 0;
+    .l1 {{
+        width: 100%;
+        height: 4px;
+        bottom: 0;
         left: 0;
-        transform: rotate(0deg);
         animation: glow1 1.8s infinite;
     }}
 
     /* 左辺 */
-    .e2 {{
-        width: 150px;
-        top: 0;
+    .l2 {{
+        width: 140%;
+        height: 4px;
+        top: 100%;
         left: 0;
-        transform: rotate(120deg);
+        transform-origin: left;
+        transform: rotate(-60deg);
         animation: glow2 1.8s infinite;
     }}
 
     /* 右辺 */
-    .e3 {{
-        width: 150px;
-        top: 0;
-        left: 0;
-        transform: rotate(-120deg);
+    .l3 {{
+        width: 140%;
+        height: 4px;
+        top: 100%;
+        right: 0;
+        transform-origin: right;
+        transform: rotate(60deg);
         animation: glow3 1.8s infinite;
     }}
 
-    /* アニメーション */
     @keyframes glow1 {{
         0%,100% {{ background: rgba(255,255,255,0.2); }}
         20% {{ background: white; }}
@@ -102,22 +107,20 @@ def set_bg(image_file):
     }}
 
     .loading-text {{
-        margin-top: 28px;
+        margin-top: 25px;
         color: white;
         font-size: 22px;
         letter-spacing: 0.2em;
     }}
 
-    /* ===== ここから元UI（そのまま） ===== */
+    /* ===== 以下はあなたのUIそのまま ===== */
 
     .block-container {{
         max-width: 600px;
         margin: 20px auto;
         padding: 28px;
-
         background: rgba(255,255,255,0.92);
         border-radius: 14px;
-
         box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         backdrop-filter: blur(6px);
     }}
@@ -167,27 +170,20 @@ def set_bg(image_file):
     div.stButton > button {{
         width: 100%;
         height: 52px;
-
         display: flex !important;
         align-items: center;
         justify-content: center;
-
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
-
         font-size: 32px;
         font-weight: 800;
         color: #333;
-
         margin: 0 !important;
         padding: 0 !important;
-
         border-radius: 8px;
-
         letter-spacing: 0.05em;
         line-height: 1.0;
-
         transition: all 0.12s ease;
     }}
 
@@ -223,9 +219,9 @@ if st.session_state.loading:
     st.markdown("""
     <div class="loading-screen">
         <div class="triangle">
-            <div class="edge e1"></div>
-            <div class="edge e2"></div>
-            <div class="edge e3"></div>
+            <div class="line l1"></div>
+            <div class="line l2"></div>
+            <div class="line l3"></div>
         </div>
         <div class="loading-text">Loading...</div>
     </div>
