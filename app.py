@@ -57,22 +57,24 @@ def set_bg(image_file):
     }}
 
     .choice-btn.selected > button {{
-        background: rgba(120,160,255,0.8) !important;
+        background: rgba(120,160,255,0.85) !important;
         color: white !important;
     }}
 
-    /* 👇 ここが重要：ナビボタン制御 */
-    .nav-left button {{
-        width: 100%;
-    }}
-
-    .nav-right {{
+    /* 👇 ナビ全体 */
+    .nav-wrap {{
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        margin-top: 20px;
     }}
 
-    .nav-right button {{
+    .nav-btn {{
+        width: 48%;
+    }}
+
+    .nav-btn button {{
         width: 100%;
+        height: 45px;
     }}
 
     </style>
@@ -93,14 +95,38 @@ if "history" not in st.session_state:
 if "selected" not in st.session_state:
     st.session_state.selected = {}
 
-# ---------- データ ----------
+# ---------- 質問（増量版） ----------
 questions = [
     ("どんな作業が好き？", {
-        "体を動かす": ["舞台", "小道具"],
-        "機材いじり": ["音響", "照明"],
-        "デザイン": ["映像", "Web"],
-        "人と関わる": ["役者", "制作"]
+        "体を動かす": ["舞台","小道具"],
+        "機材いじり": ["音響","照明"],
+        "デザイン": ["映像","Web"],
+        "人と関わる": ["役者","制作"]
     }),
+    ("得意なことは？", {
+        "細かい作業": ["衣装","小道具"],
+        "音や光": ["音響","照明"],
+        "企画する": ["制作"],
+        "表現する": ["役者"]
+    }),
+    ("どんな時に楽しい？", {
+        "完成した瞬間": ["舞台","小道具"],
+        "音や光がハマる時": ["音響","照明"],
+        "作品を作る時": ["映像","Web"],
+        "人と関わる時": ["役者","制作"]
+    }),
+    ("性格はどっち？", {
+        "コツコツ型": ["衣装","小道具"],
+        "クリエイティブ型": ["映像","Web"],
+        "リーダー型": ["制作"],
+        "目立つのが好き": ["役者"]
+    }),
+    ("好きな役割は？", {
+        "裏で支える": ["舞台","小道具","衣装"],
+        "技術で支える": ["音響","照明"],
+        "発信する": ["Web","映像"],
+        "前に出る": ["役者"]
+    })
 ]
 
 # ---------- UI ----------
@@ -127,11 +153,13 @@ if q_index < len(questions):
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # 👇 ナビボタン（ここが本命修正）
+    # 👇 ナビ（完全固定レイアウト）
+    st.markdown('<div class="nav-wrap">', unsafe_allow_html=True)
+
     col1, col2 = st.columns([1,1])
 
     with col1:
-        st.markdown('<div class="nav-left">', unsafe_allow_html=True)
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
         if q_index > 0:
             if st.button("← 戻る"):
                 st.session_state.q_index -= 1
@@ -139,10 +167,15 @@ if q_index < len(questions):
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown('<div class="nav-right">', unsafe_allow_html=True)
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
         if st.button("次へ →"):
             st.session_state.q_index += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown('</div>', unsafe_allow_html=True)
+
     st.progress((q_index + 1) / len(questions))
+
+else:
+    st.markdown("<h2 style='text-align:center;'>🎉 診断結果</h2>", unsafe_allow_html=True)
