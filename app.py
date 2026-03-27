@@ -42,18 +42,18 @@ def set_bg(image_file):
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }}
 
-   /* ボタンの箱を消す */
-.stButton > button {
+/* ボタンの箱を消す */
+.stButton > button {{
     background: rgba(255,255,255,0.6) !important;
     border: none !important;
     box-shadow: none !important;
     color: black !important;
-}
+}}
 
 /* ホバー時だけ少し強調 */
-.stButton > button:hover {
+.stButton > button:hover {{
     background: rgba(255,255,255,0.85) !important;
-}
+}}
 /* ボタン全幅 */
     .stButton > button {{
         width: 100% !important;
