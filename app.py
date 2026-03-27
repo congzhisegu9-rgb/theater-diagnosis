@@ -34,53 +34,57 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
+    /* 中央パネル */
     .block-container {{
         max-width: 700px;
         margin: 60px auto;
-        padding: 40px;
-        background: rgba(255,255,255,0.88);
-        backdrop-filter: blur(10px);
+        padding: 60px 40px;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(12px);
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        text-align: center;
     }}
 
     header, footer {{
         visibility: hidden;
     }}
 
-    /* ボタン */
+    /* ボタン全体 */
     div.stButton {{
         width: 100%;
     }}
 
+    /* ボタン本体（テキストUI化） */
     div.stButton > button {{
-        width: calc(100% + 60px) !important;
-        margin-left: -30px;
-        margin-right: -30px;
+        width: calc(100% + 80px) !important;
+        margin-left: -40px;
+        margin-right: -40px;
 
-        height: 55px;
+        height: 60px;
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
 
-        color: black !important;
-        font-size: 16px;
-        text-align: center;   /* ← 中央寄せ */
-        padding-left: 0;      /* ← 余白削除 */
+        font-size: 20px;
+        font-weight: 500;
+        color: #333 !important;
 
-        margin-top: 6px;
-        margin-bottom: 6px;
+        text-align: center;
+        padding: 0;
 
         transition: 0.2s;
         border-radius: 10px;
     }}
 
+    /* ホバー */
     div.stButton > button:hover {{
-        background: rgba(255,255,255,0.6) !important;
+        background: rgba(255,255,255,0.5) !important;
     }}
 
+    /* 選択状態 */
     div.stButton.selected > button {{
-        background: rgba(100,150,255,0.65) !important;
+        background: rgba(100,150,255,0.5) !important;
         color: white !important;
     }}
 
@@ -134,11 +138,11 @@ questions = [
 q_index = st.session_state.q_index
 
 st.markdown("## 🎭 セクション適性診断")
+st.caption(f"{q_index+1} / {len(questions)} 問")
 
 if q_index < len(questions):
     q, choices = questions[q_index]
 
-    st.caption(f"{q_index+1} / {len(questions)} 問")
     st.markdown(f"### Q{q_index+1}. {q}")
 
     for choice, secs in choices.items():
@@ -182,7 +186,7 @@ else:
     st.markdown(f"### {top1} & {top2} タイプ！")
 
     st.markdown(f"""
-    <div style="background:rgba(255,255,255,0.75); padding:20px; border-radius:15px;">
+    <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:15px;">
     <b>{top1}</b>：{descriptions[top1]}<br><br>
     <b>{top2}</b>：{descriptions[top2]}
     </div>
