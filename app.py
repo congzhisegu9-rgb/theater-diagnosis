@@ -7,7 +7,6 @@ if "loading" not in st.session_state:
     st.session_state.loading = True
 if "result_loading" not in st.session_state:
     st.session_state.result_loading = False
-
 # ---------- 背景 ----------
 def set_bg(image_file):
     with open(image_file, "rb") as f:
@@ -131,18 +130,82 @@ if st.session_state.loading:
     st.rerun()
 
 # ===== 以下にあなたの元コードをそのまま貼る =====
-/* ===== 中央寄せ ===== */
-.choice-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 180px);
-}
+import streamlit as st
+import base64
 
-.choice-wrapper .stButton {
-    width: 70%;
-}
+# ---------- 背景 ----------
+def set_bg(image_file):
+    with open(image_file, "rb") as f:
+        img = base64.b64encode(f.read()).decode()
+
+    st.markdown(f"""
+    <style>
+
+    html, body, .stApp {{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }}
+
+    .stApp {{
+        background-image: url("data:image/png;base64,{img}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+
+    /* ===== 中央カード ===== */
+    .block-container {{
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 28px;
+
+        background: rgba(255,255,255,0.92);
+        border-radius: 14px;
+
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        backdrop-filter: blur(6px);
+    }}
+
+    header, footer {{
+        visibility: hidden;
+    }}
+
+    /* ===== タイトル ===== */
+    .title {{
+        text-align: center;
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        line-height: 1.05;
+    }}
+
+    .subtitle {{
+        text-align: center;
+        color: #888;
+        margin-bottom: 6px;
+        font-size: 14px;
+    }}
+
+    .question {{
+        text-align: center;
+        font-size: 30px;
+        font-weight: 600;
+        margin: 10px 0;
+        line-height: 1.1;
+    }}
+
+    /* ===== 中央寄せ ===== */
+    .choice-wrapper {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }}
+
+    .choice-wrapper .stButton {{
+        width: 70%;
+    }}
+
     /* ===== ボタン（超デカ文字） ===== */
     div.stButton {{
         margin: 0 !important;
@@ -303,7 +366,7 @@ if q_index >= len(questions) and not st.session_state.result_loading:
 
     time.sleep(3.5)
     st.rerun()
-    
+
 st.markdown(f"""
 <div class="title">🎭 セクション適性診断</div>
 <div class="subtitle">{q_index+1} / {len(questions)} 問</div>
