@@ -18,16 +18,13 @@ def set_bg(image_file):
     .stApp {{
         background-image: url("data:image/png;base64,{img}");
         background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
+        background-position: center;
         background-attachment: fixed;
     }}
 
     .stApp::before {{
         content: "";
         position: fixed;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         background: rgba(0,0,0,0.4);
@@ -40,7 +37,7 @@ def set_bg(image_file):
         margin: 60px auto;
         padding: 60px 40px;
         background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(12px);
+        backdrop-filter: blur(10px);
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         text-align: center;
@@ -50,42 +47,40 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ボタン全体 */
-    div.stButton {{
-        width: 100%;
+    /* ラジオボタン全体 */
+    div[role="radiogroup"] {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }}
 
-    /* ボタン本体（テキストUI化） */
-    div.stButton > button {{
-        width: calc(100% + 80px) !important;
-        margin-left: -40px;
-        margin-right: -40px;
-
-        height: 60px;
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-
-        font-size: 20px;
-        font-weight: 500;
-        color: #333 !important;
-
+    /* 各選択肢 */
+    div[role="radiogroup"] label {{
+        width: 90%;
+        padding: 18px 0;
+        margin: 8px 0;
         text-align: center;
-        padding: 0;
-
+        font-size: 20px;
+        border-radius: 12px;
+        cursor: pointer;
         transition: 0.2s;
-        border-radius: 10px;
     }}
 
     /* ホバー */
-    div.stButton > button:hover {{
-        background: rgba(255,255,255,0.5) !important;
+    div[role="radiogroup"] label:hover {{
+        background: rgba(255,255,255,0.5);
     }}
 
     /* 選択状態 */
-    div.stButton.selected > button {{
-        background: rgba(100,150,255,0.5) !important;
-        color: white !important;
+    div[role="radiogroup"] input:checked + div {{
+        background: rgba(100,150,255,0.5);
+        color: white;
+        border-radius: 12px;
+    }}
+
+    /* ラジオ丸を消す */
+    div[role="radiogroup"] input {{
+        display: none;
     }}
 
     </style>
@@ -102,9 +97,6 @@ if "scores" not in st.session_state:
 
 if "history" not in st.session_state:
     st.session_state.history = []
-
-if "selected" not in st.session_state:
-    st.session_state.selected = {}
 
 # ---------- データ ----------
 descriptions = {
@@ -145,26 +137,22 @@ if q_index < len(questions):
 
     st.markdown(f"### Q{q_index+1}. {q}")
 
-    for choice, secs in choices.items():
+    # 👇 ラジオに変更（これが本質）
+    selected = st.radio(
+        "",
+        list(choices.keys()),
+        key=f"radio_{q_index}"
+    )
 
-        selected_class = ""
-        if st.session_state.selected.get(q_index) == choice:
-            selected_class = "selected"
+    if st.button("次へ"):
+        secs = choices[selected]
+        st.session_state.history.append(secs)
 
-        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
+        for sec in secs:
+            st.session_state.scores[sec] += 1
 
-        if st.button(choice, key=f"{q_index}_{choice}"):
-
-            st.session_state.selected[q_index] = choice
-
-            st.session_state.history.append(secs)
-            for sec in secs:
-                st.session_state.scores[sec] += 1
-
-            st.session_state.q_index += 1
-            st.rerun()
-
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.session_state.q_index += 1
+        st.rerun()
 
     if q_index > 0:
         if st.button("← 戻る"):
@@ -195,6 +183,5 @@ else:
     if st.button("もう一度"):
         st.session_state.q_index = 0
         st.session_state.scores = {k:0 for k in st.session_state.scores}
-        st.session_state.history = []
-        st.session_state.selected = {}
+        st.session_state.history = {}
         st.rerun()
