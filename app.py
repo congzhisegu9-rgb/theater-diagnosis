@@ -10,9 +10,8 @@ def set_bg(image_file):
     <style>
 
     html, body, .stApp {{
-        margin: 0;
-        padding: 0;
         height: 100%;
+        margin: 0;
     }}
 
     .stApp {{
@@ -31,56 +30,43 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* 中央パネル */
     .block-container {{
-        max-width: 700px;
+        max-width: 720px;
         margin: 60px auto;
-        padding: 50px 40px;
+        padding: 40px 30px;
         background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(12px);
+        backdrop-filter: blur(10px);
         border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        text-align: center;
     }}
 
     header, footer {{
         visibility: hidden;
     }}
 
-    /* ===== ラジオ完全カスタム ===== */
+    /* 選択肢 */
+    .choice-btn > button {{
+        width: 90%;
+        margin: 10px auto;
+        display: block;
 
-    /* 丸を消す */
-    input[type="radio"] {{
-        display: none;
-    }}
+        height: 60px;
+        border-radius: 999px;
 
-    /* グループ */
-    div[role="radiogroup"] {{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-        margin-top: 40px;
-    }}
-
-    /* ラベル（＝選択肢） */
-    div[role="radiogroup"] label {{
-        font-size: 22px;
+        border: none !important;
+        background: transparent !important;
+        font-size: 18px;
         text-align: center;
-        cursor: pointer;
+
         transition: 0.2s;
-        padding: 8px 0;
     }}
 
-    /* ホバー */
-    div[role="radiogroup"] label:hover {{
-        opacity: 0.6;
+    .choice-btn > button:hover {{
+        background: rgba(255,255,255,0.6) !important;
     }}
 
-    /* 選択時（ほんのり強調） */
-    div[role="radiogroup"] input:checked + div {{
-        font-weight: bold;
-        transform: scale(1.05);
+    .choice-btn.selected > button {{
+        background: rgba(120,160,255,0.8) !important;
+        color: white !important;
     }}
 
     </style>
@@ -97,6 +83,9 @@ if "scores" not in st.session_state:
 
 if "history" not in st.session_state:
     st.session_state.history = []
+
+if "selected" not in st.session_state:
+    st.session_state.selected = {}
 
 # ---------- データ ----------
 descriptions = {
@@ -129,21 +118,37 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-st.markdown("## 🎭 セクション適性診断")
+st.markdown("<h1 style='text-align:center;'>🎭 セクション適性診断</h1>", unsafe_allow_html=True)
 
 if q_index < len(questions):
     q, choices = questions[q_index]
 
-    st.caption(f"{q_index+1} / {len(questions)} 問")
-    st.markdown(f"### Q{q_index+1}. {q}")
+    st.markdown(f"<p style='text-align:center;'>{q_index+1} / {len(questions)} 問</p>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align:center;'>Q{q_index+1}. {q}</h2>", unsafe_allow_html=True)
 
-    choice = st.radio(
-        "",
-        list(choices.keys()),
-        key=f"radio_{q_index}"
-    )
+    for choice, secs in choices.items():
 
-    col1, col2 = st.columns(2)
+        selected_class = ""
+        if st.session_state.selected.get(q_index) == choice:
+            selected_class = "selected"
+
+        st.markdown(f'<div class="choice-btn {selected_class}">', unsafe_allow_html=True)
+
+        if st.button(choice, key=f"{q_index}_{choice}"):
+
+            st.session_state.selected[q_index] = choice
+
+            st.session_state.history.append(secs)
+            for sec in secs:
+                st.session_state.scores[sec] += 1
+
+            st.session_state.q_index += 1
+            st.rerun()
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # 👇 ここが今回の修正ポイント（左右配置）
+    col1, col2 = st.columns([1,1])
 
     with col1:
         if q_index > 0:
@@ -155,23 +160,19 @@ if q_index < len(questions):
                 st.rerun()
 
     with col2:
-        if st.button("次へ"):
-            secs = choices[choice]
-            st.session_state.history.append(secs)
-            for sec in secs:
-                st.session_state.scores[sec] += 1
+        if st.button("次へ →"):
             st.session_state.q_index += 1
             st.rerun()
 
     st.progress((q_index + 1) / len(questions))
 
 else:
-    st.markdown("## 🎉 診断結果")
+    st.markdown("<h2 style='text-align:center;'>🎉 診断結果</h2>", unsafe_allow_html=True)
 
     sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
-    st.markdown(f"### {top1} & {top2} タイプ！")
+    st.markdown(f"<h3 style='text-align:center;'>{top1} & {top2} タイプ！</h3>", unsafe_allow_html=True)
 
     st.markdown(f"""
     <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:15px;">
@@ -184,4 +185,5 @@ else:
         st.session_state.q_index = 0
         st.session_state.scores = {k:0 for k in st.session_state.scores}
         st.session_state.history = []
+        st.session_state.selected = {}
         st.rerun()
