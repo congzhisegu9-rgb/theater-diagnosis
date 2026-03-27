@@ -22,11 +22,11 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== 中央カード（さらに圧縮） ===== */
+    /* ===== 中央カード ===== */
     .block-container {{
         max-width: 600px;
         margin: 20px auto;
-        padding: 28px 28px;
+        padding: 28px;
 
         background: rgba(255,255,255,0.92);
         border-radius: 14px;
@@ -42,7 +42,7 @@ def set_bg(image_file):
     /* ===== タイトル ===== */
     .title {{
         text-align: center;
-        font-size: 40px;
+        font-size: 42px;
         font-weight: 700;
         margin-bottom: 2px;
         line-height: 1.05;
@@ -57,14 +57,13 @@ def set_bg(image_file):
 
     .question {{
         text-align: center;
-        font-size: 28px;
+        font-size: 30px;
         font-weight: 600;
         margin: 10px 0;
         line-height: 1.1;
-        letter-spacing: 0.02em;
     }}
 
-    /* ===== 選択肢中央寄せ ===== */
+    /* ===== 中央寄せ ===== */
     .choice-wrapper {{
         display: flex;
         flex-direction: column;
@@ -75,7 +74,7 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン（極限圧縮） ===== */
+    /* ===== ボタン（超デカ文字） ===== */
     div.stButton {{
         margin: 0 !important;
         padding: 0 !important;
@@ -83,7 +82,7 @@ def set_bg(image_file):
 
     div.stButton > button {{
         width: 100%;
-        height: 42px;  /* ← 限界まで削る */
+        height: 52px;  /* ← 少し戻して押しやすく */
 
         display: flex !important;
         align-items: center;
@@ -93,8 +92,8 @@ def set_bg(image_file):
         border: none !important;
         box-shadow: none !important;
 
-        font-size: 25px;
-        font-weight: 700;
+        font-size: 32px;   /* ← ここが最大強化ポイント */
+        font-weight: 800;  /* ← 超太字 */
         color: #333;
 
         margin: 0 !important;
@@ -108,10 +107,10 @@ def set_bg(image_file):
         transition: all 0.12s ease;
     }}
 
-    /* ホバー（控えめ） */
+    /* ホバー */
     div.stButton > button:hover {{
-        background: rgba(0,0,0,0.05) !important;
-        transform: scale(1.015);
+        background: rgba(0,0,0,0.06) !important;
+        transform: scale(1.02);
     }}
 
     div.stButton.selected > button {{
