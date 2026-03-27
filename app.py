@@ -7,45 +7,87 @@ def set_bg(image_file):
         img = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
-<style>
+    <style>
 
-/* 全体 */
-.block-container {{
-    max-width: 700px;  /* ←これで基準を統一 */
-}}
+    html, body, .stApp {{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }}
 
-/* カード */
-.card {{
-    background: rgba(255,255,255,0.95);
-    padding: 30px;
-    border-radius: 20px;
-    margin: 40px auto;
-}}
+    /* 背景 */
+    .stApp {{
+        background-image: url("data:image/png;base64,{img}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }}
 
-/* 質問ボックス */
-.question-box {{
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 15px;
-}}
+    /* 暗くする */
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.35);
+        z-index: -1;
+    }}
 
-/* ボタンを完全に横いっぱいにする */
-.stButton {{
-    width: 100%;
-}}
+    /* 白背景消す */
+    .main, .block-container {{
+        background: transparent;
+    }}
 
-.stButton > button {{
-    width: 100% !important;
-    display: block;
-    height: 55px;
-    border-radius: 12px;
-    font-size: 16px;
-    margin: 6px 0;
-}}
+    /* 横幅統一（重要） */
+    .block-container {{
+        max-width: 700px;
+    }}
 
-</style>
-""", unsafe_allow_html=True)
+    header, footer {{
+        visibility: hidden;
+    }}
+
+    /* 外カード */
+    .card {{
+        background: rgba(255,255,255,0.95);
+        padding: 30px;
+        border-radius: 20px;
+        margin: 40px auto;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }}
+
+    /* 質問カード */
+    .question-box {{
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 15px;
+    }}
+
+    /* ボタン全幅 */
+    .stButton {{
+        width: 100%;
+    }}
+
+    .stButton > button {{
+        width: 100% !important;
+        height: 55px;
+        border-radius: 12px;
+        font-size: 16px;
+        margin: 6px 0;
+        transition: 0.2s;
+    }}
+
+    /* ホバーで映える */
+    .stButton > button:hover {{
+        transform: scale(1.02);
+    }}
+
+    </style>
+    """, unsafe_allow_html=True)
+
+set_bg("prism-logo.png")
+
 # ---------- 状態 ----------
 if "q_index" not in st.session_state:
     st.session_state.q_index = 0
@@ -95,26 +137,22 @@ if q_index < len(questions):
     st.markdown("## 🎭 セクション適性診断")
     st.caption(f"{q_index+1} / {len(questions)} 問")
 
-    # 👇 containerで完全に一体化
-    with st.container():
-        st.markdown('<div class="question-box">', unsafe_allow_html=True)
+    # 👇完全一体化エリア
+    st.markdown('<div class="question-box">', unsafe_allow_html=True)
 
-        st.markdown(f"### Q{q_index+1}. {q}")
+    st.markdown(f"### Q{q_index+1}. {q}")
 
-        # 👇 columnsで幅を固定（これが効く）
-        for choice, secs in choices.items():
-            col = st.columns([1])[0]
-            with col:
-                if st.button(choice, key=f"{q_index}_{choice}"):
-                    st.session_state.history.append(secs)
-                    for sec in secs:
-                        st.session_state.scores[sec] += 1
-                    st.session_state.q_index += 1
-                    st.rerun()
+    for choice, secs in choices.items():
+        if st.button(choice, key=f"{q_index}_{choice}"):
+            st.session_state.history.append(secs)
+            for sec in secs:
+                st.session_state.scores[sec] += 1
+            st.session_state.q_index += 1
+            st.rerun()
 
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # 戻るボタン
+    # 戻る
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
@@ -136,7 +174,11 @@ else:
     sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
-    st.markdown(f"### {top1} & {top2} タイプ！")
+    st.markdown(f"""
+    <div style="text-align:center; font-size:28px;">
+    {top1} & {top2} タイプ！
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown(f"""
     <div style="background:#f5f5f5; padding:20px; border-radius:10px;">
