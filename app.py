@@ -20,9 +20,9 @@ def get_base64(file_path):
     with open(file_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-img = get_base64("prism-logo.png")
+img = get_base64("prism-logo.jpg")
 
-# ===== CSS（完成版）=====
+# ===== CSS（デザイン本体）=====
 st.markdown(f"""
 <style>
 
@@ -33,74 +33,53 @@ st.markdown(f"""
     background-position: center;
 }}
 
-.stApp::before {{
-    content:"";
-    position:fixed;
-    width:100%;
-    height:100%;
-    backdrop-filter: blur(8px); /* ぼかし */
-    background: rgba(0,0,0,0.35); /* 暗さ */
-    z-index:-1;
-}}
-
-/* ===== フォント ===== */
-html, body, [class*="css"] {{
-    font-family: "Helvetica Neue", "Noto Sans JP", sans-serif;
+/* ===== 中央配置 ===== */
+.main > div {{
+    display: flex;
+    justify-content: center;
 }}
 
 /* ===== ガラスカード ===== */
 .glass {{
-    background: linear-gradient(
-        rgba(255,255,255,0.45),
-        rgba(255,255,255,0.25)
-    ); /* ←方法A */
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    border-radius: 25px;
+    padding: 40px 50px;
 
-    border-radius: 20px;
-    padding: 35px;
-    max-width: 720px;
-    margin: 30px auto;
+    width: 650px;
+    margin-top: 80px;
 
-    border: 1px solid rgba(255,255,255,0.4);
-    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+    border: 1.5px solid rgba(255,255,255,0.6);
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 
     animation: fadeIn 0.6s ease;
-    text-align: center;
 }}
 
-/* ===== テキスト（方法B） ===== */
-.glass h1, .glass h2, .glass h3 {{
-    color: #111;
-    text-shadow: 0 1px 3px rgba(255,255,255,0.6);
-}}
-
-.glass h1 {{
-    font-weight: 600;
-}}
-
+/* ===== タイトル ===== */
 .glass h3 {{
-    margin-bottom: 20px;
+    text-align: left;
+    font-size: 24px;
+    color: #222;
+    margin-bottom: 25px;
 }}
 
 /* ===== 選択肢 ===== */
-div[data-testid="stRadio"] {{
-    margin-top: 15px;
-}}
-
 div[data-testid="stRadio"] label {{
-    background: rgba(255,255,255,0.5);
-    margin: 8px 0;
-    padding: 12px 14px;
-    border-radius: 12px;
+    background: transparent;
+    padding: 12px 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    color: #222 !important;
+    font-size: 18px;
     transition: 0.2s;
-    color: black !important;
 }}
 
 div[data-testid="stRadio"] label:hover {{
-    background: rgba(255,255,255,0.75);
-    transform: translateX(6px);
+    background: rgba(255,255,255,0.3);
+    transform: translateX(8px);
 }}
 
 /* ===== アニメーション ===== */
@@ -136,23 +115,13 @@ QUESTIONS = [
 
 # ===== ローディング =====
 if not st.session_state.started:
-    st.markdown('<div class="glass"><h2>Loading...</h2></div>', unsafe_allow_html=True)
+    st.markdown('<div class="glass"><h3>Loading...</h3></div>', unsafe_allow_html=True)
     bar = st.progress(0)
     for i in range(101):
         time.sleep(0.01)
         bar.progress(i)
     st.session_state.started = True
     st.rerun()
-
-# ===== タイトル =====
-st.markdown("""
-<div class="glass">
-<h1>セクション適性診断</h1>
-</div>
-""", unsafe_allow_html=True)
-
-# ===== 進捗 =====
-st.progress(st.session_state.q_index / len(QUESTIONS))
 
 # ===== 質問 =====
 if st.session_state.q_index < len(QUESTIONS):
@@ -196,12 +165,12 @@ else:
 
     st.markdown(f"""
     <div class="glass">
-    <h2>
+    <h3>
     あなたは<br><br>
     <b>{top1}セクションタイプ</b><br><br>
     ＆<br><br>
     <b>{top2}セクションタイプ</b>
-    </h2>
+    </h3>
     </div>
     """, unsafe_allow_html=True)
 
