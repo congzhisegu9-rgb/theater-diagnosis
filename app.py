@@ -20,7 +20,7 @@ def get_base64(file_path):
     with open(file_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-img = get_base64("prism-logo.jpg")
+img = get_base64("prism-logo.png")
 
 # ===== CSS（完成版）=====
 st.markdown(f"""
@@ -147,7 +147,7 @@ if not st.session_state.started:
 # ===== タイトル =====
 st.markdown("""
 <div class="glass">
-<h1>🎭 セクション適性診断</h1>
+<h1>セクション適性診断</h1>
 </div>
 """, unsafe_allow_html=True)
 
