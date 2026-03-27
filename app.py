@@ -60,11 +60,18 @@ def set_bg(image_file):
         margin: 30px 0;
     }}
 
-    /* ===== ボタン ===== */
-    div.stButton {{
-        width: 100%;
+    /* ===== 選択肢中央寄せ ===== */
+    .choice-wrapper {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }}
 
+    .choice-wrapper .stButton {{
+        width: 70%;
+    }}
+
+    /* ===== ボタン ===== */
     div.stButton > button {{
         width: 100%;
         height: 50px;
@@ -184,7 +191,6 @@ questions = [
     }),
 ]
 
-
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
@@ -199,6 +205,9 @@ if q_index < len(questions):
     q, choices = questions[q_index]
 
     st.markdown(f'<div class="question">Q{q_index+1}. {q}</div>', unsafe_allow_html=True)
+
+    # ===== 中央寄せラッパー =====
+    st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
 
     for choice, secs in choices.items():
 
@@ -221,7 +230,9 @@ if q_index < len(questions):
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # 戻るボタン
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # 戻る
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
