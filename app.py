@@ -22,70 +22,64 @@ def get_base64(file_path):
 
 img = get_base64("prism-logo.png")
 
-# ===== CSS（デザイン本体）=====
+# ===== CSS（安定版）=====
 st.markdown(f"""
 <style>
 
-/* ===== 背景 ===== */
 .stApp {{
     background-image: url("data:image/jpg;base64,{img}");
     background-size: cover;
     background-position: center;
 }}
 
-/* ===== 中央配置 ===== */
-.main > div {{
-    display: flex;
-    justify-content: center;
+/* 背景をほんのり暗く */
+.stApp::before {{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter: blur(4px);
+    z-index:-1;
 }}
 
-/* ===== ガラスカード ===== */
-.glass {{
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    border-radius: 25px;
-    padding: 40px 50px;
-
-    width: 650px;
-    margin-top: 80px;
-
-    border: 1.5px solid rgba(255,255,255,0.6);
-
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-
-    animation: fadeIn 0.6s ease;
+/* 共通カード */
+.card {{
+    background: rgba(255,255,255,0.92);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 700px;
+    margin: 30px auto;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    text-align: center;
 }}
 
-/* ===== タイトル ===== */
-.glass h3 {{
-    text-align: left;
-    font-size: 24px;
-    color: #222;
-    margin-bottom: 25px;
+/* 質問カード */
+.q-card {{
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 700px;
+    margin: 20px auto;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }}
 
-/* ===== 選択肢 ===== */
+/* 質問文 */
+.q-card h3 {{
+    text-align: center;
+    color: black;
+    margin-bottom: 15px;
+}}
+
+/* 選択肢 */
 div[data-testid="stRadio"] label {{
-    background: transparent;
-    padding: 12px 10px;
-    margin: 10px 0;
+    color: black !important;
+    padding: 10px;
     border-radius: 10px;
-    color: #222 !important;
-    font-size: 18px;
-    transition: 0.2s;
 }}
 
 div[data-testid="stRadio"] label:hover {{
-    background: rgba(255,255,255,0.3);
-    transform: translateX(8px);
-}}
-
-/* ===== アニメーション ===== */
-@keyframes fadeIn {{
-    from {{opacity:0; transform: translateY(20px);}}
-    to {{opacity:1; transform: translateY(0);}}
+    background: rgba(0,0,0,0.08);
 }}
 
 </style>
@@ -115,13 +109,25 @@ QUESTIONS = [
 
 # ===== ローディング =====
 if not st.session_state.started:
-    st.markdown('<div class="glass"><h3>Loading...</h3></div>', unsafe_allow_html=True)
+    st.markdown('<div class="card"><h2>Loading...</h2></div>', unsafe_allow_html=True)
+
     bar = st.progress(0)
     for i in range(101):
         time.sleep(0.01)
         bar.progress(i)
+
     st.session_state.started = True
     st.rerun()
+
+# ===== タイトル（復活）=====
+st.markdown("""
+<div class="card">
+<h1>🎭 セクション適性診断</h1>
+</div>
+""", unsafe_allow_html=True)
+
+# ===== 進捗 =====
+st.progress(st.session_state.q_index / len(QUESTIONS))
 
 # ===== 質問 =====
 if st.session_state.q_index < len(QUESTIONS):
@@ -129,7 +135,7 @@ if st.session_state.q_index < len(QUESTIONS):
     q = QUESTIONS[st.session_state.q_index]
 
     with st.container():
-        st.markdown('<div class="glass">', unsafe_allow_html=True)
+        st.markdown('<div class="q-card">', unsafe_allow_html=True)
 
         st.markdown(f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>", unsafe_allow_html=True)
 
@@ -164,13 +170,13 @@ else:
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
     st.markdown(f"""
-    <div class="glass">
-    <h3>
+    <div class="card">
+    <h2>
     あなたは<br><br>
     <b>{top1}セクションタイプ</b><br><br>
     ＆<br><br>
     <b>{top2}セクションタイプ</b>
-    </h3>
+    </h2>
     </div>
     """, unsafe_allow_html=True)
 
