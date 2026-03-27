@@ -147,7 +147,8 @@ if q_index < len(questions):
 
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    st.markdown('<div class="title">🎭 セクション適性診断</div>', unsafe_allow_html=True)
+    # タイトル（カード内）
+    st.markdown("## 🎭 セクション適性診断")
 
     st.subheader(f"Q{q_index+1}. {q}")
 
@@ -159,13 +160,15 @@ if q_index < len(questions):
         st.session_state.q_index += 1
         st.rerun()
 
-    st.markdown('</div>', unsafe_allow_html=True)
+    # ← ここに進捗バー
+    st.progress((q_index + 1) / len(questions))
 
+    st.markdown('</div>', unsafe_allow_html=True)
 # ---------- 結果 ----------
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    st.markdown('<div class="title">🎭 診断結果</div>', unsafe_allow_html=True)
+    st.markdown("## 🎭 診断結果")
 
     sorted_scores = sorted(
         st.session_state.scores.items(),
