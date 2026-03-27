@@ -1,196 +1,96 @@
-import streamlit as st
-import base64
+st.markdown(f"""
+<style>
 
-# ---------- 背景 ----------
-def set_bg(image_file):
-    with open(image_file, "rb") as f:
-        img = base64.b64encode(f.read()).decode()
+/* ===== 全体 ===== */
+html, body, .stApp {{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}}
 
-    st.markdown(f"""
-    <style>
+.stApp {{
+    background-image: url("data:image/png;base64,{img}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}}
 
-    html, body, .stApp {{
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }}
+/* ===== 中央カード ===== */
+.block-container {{
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 60px 50px;
 
-    .stApp {{
-        background-image: url("data:image/png;base64,{img}");
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }}
+    background: rgba(255,255,255,0.92);
+    border-radius: 16px;
 
-    .stApp::before {{
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.4);
-        z-index: -1;
-    }}
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    backdrop-filter: blur(6px);
+}}
 
-    .block-container {{
-        max-width: 700px;
-        margin: 60px auto;
-        padding: 40px;
-        background: rgba(255,255,255,0.88);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }}
+/* Streamlitデフォルト非表示 */
+header, footer {{
+    visibility: hidden;
+}}
 
-    header, footer {{
-        visibility: hidden;
-    }}
+/* ===== タイトル ===== */
+.title {{
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}}
 
-    /* ボタン */
-    div.stButton {{
-        width: 100%;
-    }}
+.subtitle {{
+    text-align: center;
+    color: #888;
+    margin-bottom: 30px;
+}}
 
-    div.stButton > button {{
-        width: calc(100% + 60px) !important;
-        margin-left: -30px;
-        margin-right: -30px;
+.question {{
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 30px 0;
+}}
 
-        height: 55px;
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
+/* ===== ボタン（選択肢） ===== */
+div.stButton {{
+    width: 100%;
+}}
 
-        color: black !important;
-        font-size: 16px;
-        text-align: left;
-        padding-left: 20px;
+div.stButton > button {{
+    width: 100%;
+    height: 50px;
 
-        margin-top: 6px;
-        margin-bottom: 6px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 
-        transition: 0.2s;
-        border-radius: 10px;
-    }}
+    font-size: 18px;
+    color: #333;
 
-    div.stButton > button:hover {{
-        background: rgba(255,255,255,0.6) !important;
-    }}
+    text-align: center;
 
-    div.stButton.selected > button {{
-        background: rgba(100,150,255,0.65) !important;
-        color: white !important;
-    }}
+    margin: 12px 0;
+    border-radius: 8px;
 
-    </style>
-    """, unsafe_allow_html=True)
+    transition: all 0.2s ease;
+}}
 
-set_bg("prism-logo.png")
+div.stButton > button:hover {{
+    background: rgba(0,0,0,0.05) !important;
+}}
 
-# ---------- 状態 ----------
-if "q_index" not in st.session_state:
-    st.session_state.q_index = 0
+div.stButton.selected > button {{
+    background: rgba(120,150,255,0.25) !important;
+    font-weight: 600;
+}}
 
-if "scores" not in st.session_state:
-    st.session_state.scores = {k:0 for k in ["舞台","音響","照明","映像","衣装","小道具","制作","Web","役者"]}
+/* ===== 進捗 ===== */
+.stProgress > div > div {{
+    background-color: #6c8cff;
+}}
 
-if "history" not in st.session_state:
-    st.session_state.history = []
-
-if "selected" not in st.session_state:
-    st.session_state.selected = {}
-
-# ---------- データ ----------
-descriptions = {
-    "舞台": "ものづくりが好きで、形にする達成感を大事にするタイプ！",
-    "音響": "音にこだわり、空間を演出するセンスの持ち主！",
-    "照明": "光で世界観を作る、演出の魔法使いタイプ！",
-    "映像": "クリエイティブに表現するのが得意なタイプ！",
-    "衣装": "細部までこだわる美意識の高いタイプ！",
-    "小道具": "職人肌で、リアルな世界を支えるタイプ！",
-    "制作": "全体をまとめるリーダー気質タイプ！",
-    "Web": "デジタルで魅せる発信力のあるタイプ！",
-    "役者": "感情表現が豊かで、人前に立つのが得意なタイプ！"
-}
-
-questions = [
-    ("どんな作業が好き？", {
-        "体を動かす": ["舞台", "小道具"],
-        "機材いじり": ["音響", "照明"],
-        "デザイン": ["映像", "Web"],
-        "人と関わる": ["役者", "制作"]
-    }),
-    ("得意なことは？", {
-        "細かい作業": ["衣装", "小道具"],
-        "音や光": ["音響", "照明"],
-        "企画": ["制作"],
-        "表現": ["役者"]
-    }),
-]
-
-# ---------- UI ----------
-q_index = st.session_state.q_index
-
-st.markdown("## 🎭 セクション適性診断")
-
-if q_index < len(questions):
-    q, choices = questions[q_index]
-
-    st.caption(f"{q_index+1} / {len(questions)} 問")
-    st.markdown(f"### Q{q_index+1}. {q}")
-
-    for choice, secs in choices.items():
-
-        selected_class = ""
-        if st.session_state.selected.get(q_index) == choice:
-            selected_class = "selected"
-
-        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
-
-        if st.button(choice, key=f"{q_index}_{choice}"):
-
-            st.session_state.selected[q_index] = choice
-
-            st.session_state.history.append(secs)
-            for sec in secs:
-                st.session_state.scores[sec] += 1
-
-            st.session_state.q_index += 1
-            st.rerun()
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    if q_index > 0:
-        if st.button("← 戻る"):
-            last_secs = st.session_state.history.pop()
-            for sec in last_secs:
-                st.session_state.scores[sec] -= 1
-
-            st.session_state.q_index -= 1
-            st.rerun()
-
-    st.progress((q_index + 1) / len(questions))
-
-else:
-    st.markdown("## 🎉 診断結果")
-
-    sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
-    top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
-
-    st.markdown(f"### {top1} & {top2} タイプ！")
-
-    st.markdown(f"""
-    <div style="background:rgba(255,255,255,0.75); padding:20px; border-radius:15px;">
-    <b>{top1}</b>：{descriptions[top1]}<br><br>
-    <b>{top2}</b>：{descriptions[top2]}
-    </div>
-    """, unsafe_allow_html=True)
-
-    if st.button("もう一度"):
-        st.session_state.q_index = 0
-        st.session_state.scores = {k:0 for k in st.session_state.scores}
-        st.session_state.history = []
-        st.session_state.selected = {}
-        st.rerun()
+</style>
+""", unsafe_allow_html=True)
