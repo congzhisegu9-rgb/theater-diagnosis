@@ -361,6 +361,12 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
+# ===== 結果直前ローディング =====
+if q_index >= len(questions) and not st.session_state.result_loading:
+    st.session_state.result_loading = True
+    show_loading()
+    st.rerun()
+    
 st.markdown(f"""
 <div class="title">🎭 セクション適性診断</div>
 <div class="subtitle">{q_index+1} / {len(questions)} 問</div>
