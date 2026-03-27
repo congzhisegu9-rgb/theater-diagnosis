@@ -2,12 +2,9 @@ import streamlit as st
 import base64
 import time
 
-# ---------- 状態 ----------
+# ---------- 初回ローディング ----------
 if "loading" not in st.session_state:
     st.session_state.loading = True
-
-if "result_loading" not in st.session_state:
-    st.session_state.result_loading = False
 
 # ---------- 背景 ----------
 def set_bg(image_file):
@@ -34,7 +31,8 @@ def set_bg(image_file):
     .loading-screen {{
         position: fixed;
         top: 0;
-        left: 0;
+        left: 50%;
+        transform: translateX(-50%);
         width: 100vw;
         height: 100vh;
 
@@ -57,7 +55,7 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* 正三角形 */
+    /* ===== 正三角形 ===== */
     .triangle-svg {{
         width: 180px;
         height: 156px;
@@ -74,22 +72,28 @@ def set_bg(image_file):
         stroke-dashoffset: 300;
 
         animation:
-            spin 1.0s linear 2,
-            finish 1.5s ease forwards 2.0s;
+            spin 0.8s linear 3,
+            finish 1.1s ease forwards 2.4s;
     }}
 
-    /* 時計回り（パス順で制御済み） */
+    /* ===== 時計回り ===== */
     @keyframes spin {{
-        0% {{ stroke-dashoffset: 300; }}
-        100% {{ stroke-dashoffset: 0; }}
+        0% {{
+            stroke-dashoffset: 300;
+        }}
+        100% {{
+            stroke-dashoffset: 0;
+        }}
     }}
 
-    /* 最後に全辺フェード */
+    /* ===== 全辺同時フェード発光 ===== */
     @keyframes finish {{
         0% {{
+            stroke-dashoffset: 0;
             stroke: rgba(255,255,255,0.4);
         }}
         100% {{
+            stroke-dashoffset: 0;
             stroke: white;
         }}
     }}
@@ -101,13 +105,63 @@ def set_bg(image_file):
         letter-spacing: 0.2em;
     }}
 
-    /* ===== 通常UI ===== */
+    </style>
+    """, unsafe_allow_html=True)
+
+
+set_bg("prism-logo.png")
+
+# ---------- ローディング ----------
+if st.session_state.loading:
+
+    st.markdown("""
+    <div class="loading-screen">
+        <svg class="triangle-svg" viewBox="0 0 100 86.6">
+            <path d="M50 0 L100 86.6 L0 86.6 Z" />
+        </svg>
+        <div class="loading-text">Loading...</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    time.sleep(3.5)
+
+    st.session_state.loading = False
+    st.rerun()
+
+# ===== 以下にあなたの元コードをそのまま貼る =====
+import streamlit as st
+import base64
+
+# ---------- 背景 ----------
+def set_bg(image_file):
+    with open(image_file, "rb") as f:
+        img = base64.b64encode(f.read()).decode()
+
+    st.markdown(f"""
+    <style>
+
+    html, body, .stApp {{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }}
+
+    .stApp {{
+        background-image: url("data:image/png;base64,{img}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+
+    /* ===== 中央カード ===== */
     .block-container {{
         max-width: 600px;
         margin: 20px auto;
         padding: 28px;
+
         background: rgba(255,255,255,0.92);
         border-radius: 14px;
+
         box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         backdrop-filter: blur(6px);
     }}
@@ -116,15 +170,19 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
+    /* ===== タイトル ===== */
     .title {{
         text-align: center;
         font-size: 42px;
         font-weight: 700;
+        margin-bottom: 2px;
+        line-height: 1.05;
     }}
 
     .subtitle {{
         text-align: center;
         color: #888;
+        margin-bottom: 6px;
         font-size: 14px;
     }}
 
@@ -132,8 +190,11 @@ def set_bg(image_file):
         text-align: center;
         font-size: 30px;
         font-weight: 600;
+        margin: 10px 0;
+        line-height: 1.1;
     }}
 
+    /* ===== 中央寄せ ===== */
     .choice-wrapper {{
         display: flex;
         flex-direction: column;
@@ -144,38 +205,67 @@ def set_bg(image_file):
         width: 70%;
     }}
 
+    /* ===== ボタン（超デカ文字） ===== */
+    div.stButton {{
+        margin: 0 !important;
+        padding: 0 !important;
+    }}
+
     div.stButton > button {{
-        font-size: 32px;
-        font-weight: 800;
+        width: 100%;
+        height: 52px;  /* ← 少し戻して押しやすく */
+
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+
         background: transparent !important;
         border: none !important;
+        box-shadow: none !important;
+
+        font-size: 32px;   /* ← ここが最大強化ポイント */
+        font-weight: 800;  /* ← 超太字 */
+        color: #333;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border-radius: 8px;
+
+        letter-spacing: 0.05em;
+        line-height: 1.0;
+
+        transition: all 0.12s ease;
+    }}
+
+    /* ホバー */
+    div.stButton > button:hover {{
+        background: rgba(0,0,0,0.06) !important;
+        transform: scale(1.02);
+    }}
+
+    div.stButton.selected > button {{
+        background: rgba(120,150,255,0.25) !important;
+    }}
+
+    /* テキスト中央 */
+    div.stButton > button p {{
+        width: 100%;
+        text-align: center !important;
+        margin: 0 !important;
+        line-height: 1.0 !important;
+    }}
+
+    /* ===== 進捗 ===== */
+    .stProgress > div > div {{
+        background-color: #6c8cff;
     }}
 
     </style>
     """, unsafe_allow_html=True)
 
+
 set_bg("prism-logo.png")
-
-# ---------- ローディング関数 ----------
-def show_loading():
-    st.markdown("""
-    <div class="loading-screen">
-        <svg class="triangle-svg" viewBox="0 0 100 86.6">
-            <!-- 時計回りになるパス -->
-            <path d="M50 0 L100 86.6 L0 86.6 Z"/>
-        </svg>
-        <div class="loading-text">Loading...</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    time.sleep(3.5)
-
-
-# ---------- 初回ローディング ----------
-if st.session_state.loading:
-    show_loading()
-    st.session_state.loading = False
-    st.rerun()
 
 # ---------- 状態 ----------
 sections = ["舞台","音響","照明","映像","宣伝美術","衣装","小道具","制作","Web","役者"]
@@ -260,15 +350,9 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
-# ★ 結果直前ローディング（修正版）
-if q_index >= len(questions) and not st.session_state.result_loading:
-    st.session_state.result_loading = True
-    show_loading()
-    st.rerun()
-
 st.markdown(f"""
 <div class="title">🎭 セクション適性診断</div>
-<div class="subtitle">{min(q_index+1,len(questions))} / {len(questions)} 問</div>
+<div class="subtitle">{q_index+1} / {len(questions)} 問</div>
 """, unsafe_allow_html=True)
 
 if q_index < len(questions):
@@ -276,12 +360,41 @@ if q_index < len(questions):
 
     st.markdown(f'<div class="question">Q{q_index+1}. {q}</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
+
     for choice, secs in choices.items():
-        if st.button(choice):
+
+        selected_class = ""
+        if st.session_state.selected.get(q_index) == choice:
+            selected_class = "selected"
+
+        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
+
+        if st.button(choice, key=f"{q_index}_{choice}"):
+
+            st.session_state.selected[q_index] = choice
+
+            st.session_state.history.append(secs)
             for sec in secs:
                 st.session_state.scores[sec] += 1
+
             st.session_state.q_index += 1
             st.rerun()
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    if q_index > 0:
+        if st.button("← 戻る"):
+            last_secs = st.session_state.history.pop()
+            for sec in last_secs:
+                st.session_state.scores[sec] -= 1
+
+            st.session_state.q_index -= 1
+            st.rerun()
+
+    st.progress((q_index + 1) / len(questions))
 
 else:
     st.markdown('<div class="title">🎉 診断結果</div>', unsafe_allow_html=True)
@@ -289,4 +402,17 @@ else:
     sorted_scores = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
-    st.write(f"{top1} & {top2}")
+    st.markdown(f"""
+    <div style="background:rgba(255,255,255,0.85); padding:20px; border-radius:12px; text-align:center;">
+    <h2>{top1} & {top2} タイプ！</h2>
+    <p><b>{top1}</b><br>{descriptions[top1]}</p>
+    <p><b>{top2}</b><br>{descriptions[top2]}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if st.button("もう一度"):
+        st.session_state.q_index = 0
+        st.session_state.scores = {k:0 for k in sections}
+        st.session_state.history = []
+        st.session_state.selected = {}
+        st.rerun()
