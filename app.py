@@ -75,7 +75,7 @@ def set_bg(image_file):
         width: 70%;
     }}
 
-    /* ===== ボタン（最強版） ===== */
+    /* ===== ボタン（間隔詰め版） ===== */
     div.stButton > button {{
         width: 100%;
         height: 56px;
@@ -92,7 +92,7 @@ def set_bg(image_file):
         font-weight: 700;
         color: #333;
 
-        margin: 6px 0;
+        margin: 2px 0;   /* ← ここがポイント（6px → 2px） */
         border-radius: 10px;
 
         letter-spacing: 0.06em;
@@ -100,7 +100,7 @@ def set_bg(image_file):
         transition: all 0.2s ease;
     }}
 
-    /* ホバー演出 */
+    /* ホバー */
     div.stButton > button:hover {{
         background: rgba(0,0,0,0.05) !important;
         transform: scale(1.03);
