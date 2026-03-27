@@ -55,61 +55,35 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* ===== 正三角形 ===== */
-    .triangle {{
+    /* ===== SVG三角形 ===== */
+    .triangle-svg {{
         width: 180px;
         height: 156px;
-        position: relative;
     }}
 
-    .line {{
-        position: absolute;
-        height: 4px;
-        background: rgba(255,255,255,0.25);
-        border-radius: 2px;
+    .triangle-svg path {{
+        fill: none;
+        stroke: rgba(255,255,255,0.25);
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+
+        stroke-dasharray: 300;
+        stroke-dashoffset: 300;
+
+        animation: draw 2s linear infinite;
     }}
 
-    /* 下辺 */
-    .l1 {{
-        width: 100%;
-        bottom: 0;
-        left: 0;
-        animation: glow1 1.8s infinite;
-    }}
-
-    /* 左辺（強化） */
-    .l2 {{
-        width: 180%;
-        bottom: 0;
-        left: 50%;
-        transform-origin: left bottom;
-        transform: rotate(-60deg);
-        animation: glow2 1.8s infinite;
-    }}
-
-    /* 右辺（強化） */
-    .l3 {{
-        width: 180%;
-        bottom: 0;
-        right: 50%;
-        transform-origin: right bottom;
-        transform: rotate(60deg);
-        animation: glow3 1.8s infinite;
-    }}
-
-    @keyframes glow1 {{
-        0%,100% {{ background: rgba(255,255,255,0.25); }}
-        20% {{ background: white; }}
-    }}
-
-    @keyframes glow2 {{
-        0%,100% {{ background: rgba(255,255,255,0.25); }}
-        50% {{ background: white; }}
-    }}
-
-    @keyframes glow3 {{
-        0%,100% {{ background: rgba(255,255,255,0.25); }}
-        80% {{ background: white; }}
+    @keyframes draw {{
+        0% {{
+            stroke-dashoffset: 300;
+        }}
+        50% {{
+            stroke: white;
+        }}
+        100% {{
+            stroke-dashoffset: 0;
+        }}
     }}
 
     .loading-text {{
@@ -130,11 +104,9 @@ if st.session_state.loading:
 
     st.markdown("""
     <div class="loading-screen">
-        <div class="triangle">
-            <div class="line l1"></div>
-            <div class="line l2"></div>
-            <div class="line l3"></div>
-        </div>
+        <svg class="triangle-svg" viewBox="0 0 100 86.6">
+            <path d="M50 0 L0 86.6 L100 86.6 Z" />
+        </svg>
         <div class="loading-text">Loading...</div>
     </div>
     """, unsafe_allow_html=True)
@@ -143,6 +115,8 @@ if st.session_state.loading:
 
     st.session_state.loading = False
     st.rerun()
+
+# ===== あなたのコードをこの下にそのまま貼る =====
 
 # ===== あなたのコードをこの下にそのまま貼る =====
 # ===== ここから下はあなたのコードそのまま貼る =====
