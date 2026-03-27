@@ -41,31 +41,16 @@ st.markdown(f"""
     z-index: -1;
 }}
 
-/* フェードイン */
 @keyframes fadeIn {{
-    from {{
-        opacity: 0;
-        transform: translateY(30px);
-    }}
-    to {{
-        opacity: 1;
-        transform: translateY(0);
-    }}
+    from {{ opacity: 0; transform: translateY(30px); }}
+    to {{ opacity: 1; transform: translateY(0); }}
 }}
 
-/* スライドイン（質問切り替え） */
 @keyframes slideIn {{
-    from {{
-        opacity: 0;
-        transform: translateX(40px);
-    }}
-    to {{
-        opacity: 1;
-        transform: translateX(0);
-    }}
+    from {{ opacity: 0; transform: translateX(40px); }}
+    to {{ opacity: 1; transform: translateX(0); }}
 }}
 
-/* タイトルカード */
 .card {{
     background: rgba(255,255,255,0.9);
     padding: 30px;
@@ -77,7 +62,6 @@ st.markdown(f"""
     text-align: center;
 }}
 
-/* 質問カード（radioごと包む） */
 div[data-testid="stRadio"] {{
     background: rgba(255,255,255,0.92);
     padding: 25px;
@@ -88,7 +72,6 @@ div[data-testid="stRadio"] {{
     animation: slideIn 0.4s ease;
 }}
 
-/* ラベル */
 div[data-testid="stRadio"] label {{
     color: black !important;
     padding: 10px;
@@ -100,17 +83,11 @@ div[data-testid="stRadio"] label:hover {{
     background: rgba(0,0,0,0.1);
 }}
 
-/* ボタン */
 div.stButton > button {{
     width: 700px;
     display: block;
     margin: 10px auto;
     border-radius: 12px;
-    transition: 0.2s;
-}}
-
-div.stButton > button:hover {{
-    transform: scale(1.05);
 }}
 
 </style>
@@ -157,7 +134,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ===== 進捗バー =====
+# ===== 進捗 =====
 progress = st.session_state.q_index / len(QUESTIONS)
 st.progress(progress)
 
@@ -175,11 +152,12 @@ if st.session_state.q_index < len(QUESTIONS):
     choice = st.radio(
         "",
         [c["text"] for c in q["choices"]],
+        index=None,  # ★これが最重要
         key=st.session_state.q_index
     )
 
-    # 自動遷移（UX改善）
-    if choice:
+    # 自動遷移
+    if choice is not None:
         time.sleep(0.2)
 
         for c in q["choices"]:
@@ -205,9 +183,7 @@ else:
     <div class="card">
     <h2>
     あなたに向いているのは…<br><br>
-    <b>{top1}</b> セクション<br>
-    ＆<br>
-    <b>{top2}</b> セクション！
+    <b>{top1}</b><br>＆<br><b>{top2}</b>
     </h2>
     </div>
     """, unsafe_allow_html=True)
