@@ -27,13 +27,12 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ===== ローディング（ズレ完全修正＋元の三角形） ===== */
+    /* ===== ローディング ===== */
     .loading-screen {{
         position: fixed;
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-
         width: 100vw;
         height: 100vh;
 
@@ -56,62 +55,60 @@ def set_bg(image_file):
         z-index: -1;
     }}
 
-    /* ===== 正三角形（辺が光るやつ） ===== */
+    /* ===== 正三角形 ===== */
     .triangle {{
-        width: 160px;
-        height: 140px;
+        width: 180px;
+        height: 156px;
         position: relative;
-        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }}
 
     .line {{
         position: absolute;
-        background: rgba(255,255,255,0.2);
+        height: 4px;
+        background: rgba(255,255,255,0.25);
+        border-radius: 2px;
     }}
 
     /* 下辺 */
     .l1 {{
         width: 100%;
-        height: 4px;
         bottom: 0;
         left: 0;
         animation: glow1 1.8s infinite;
     }}
 
-    /* 左辺 */
+    /* 左辺（強化） */
     .l2 {{
-        width: 140%;
-        height: 4px;
+        width: 180%;
         bottom: 0;
-        left: 0;
+        left: 50%;
         transform-origin: left bottom;
         transform: rotate(-60deg);
         animation: glow2 1.8s infinite;
     }}
 
-    /* 右辺 */
+    /* 右辺（強化） */
     .l3 {{
-        width: 140%;
-        height: 4px;
+        width: 180%;
         bottom: 0;
-        right: 0;
+        right: 50%;
         transform-origin: right bottom;
         transform: rotate(60deg);
         animation: glow3 1.8s infinite;
     }}
 
     @keyframes glow1 {{
-        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        0%,100% {{ background: rgba(255,255,255,0.25); }}
         20% {{ background: white; }}
     }}
 
     @keyframes glow2 {{
-        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        0%,100% {{ background: rgba(255,255,255,0.25); }}
         50% {{ background: white; }}
     }}
 
     @keyframes glow3 {{
-        0%,100% {{ background: rgba(255,255,255,0.2); }}
+        0%,100% {{ background: rgba(255,255,255,0.25); }}
         80% {{ background: white; }}
     }}
 
@@ -147,6 +144,7 @@ if st.session_state.loading:
     st.session_state.loading = False
     st.rerun()
 
+# ===== あなたのコードをこの下にそのまま貼る =====
 # ===== ここから下はあなたのコードそのまま貼る =====
 # ===== ここから下はあなたのコードそのまま =====
 import streamlit as st
