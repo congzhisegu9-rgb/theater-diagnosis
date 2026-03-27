@@ -173,7 +173,7 @@ if q_index < len(questions):
 else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    st.markdown("## 🎭 診断結果")
+    st.markdown("## 🎉 診断結果")
 
     sorted_scores = sorted(
         st.session_state.scores.items(),
@@ -183,15 +183,37 @@ else:
 
     top1, top2 = sorted_scores[0][0], sorted_scores[1][0]
 
-    st.markdown(f"## あなたは **{top1} & {top2} タイプ！**")
-
+    # メイン結果（強調）
     st.markdown(f"""
-    **{descriptions[top1]}**  
-    ＋  
-    **{descriptions[top2]}**
+    <div style="
+        font-size:24px;
+        font-weight:bold;
+        text-align:center;
+        margin:20px 0;
+    ">
+        あなたは<br>
+        <span style="font-size:32px; color:#ff4b4b;">
+        {top1} & {top2}
+        </span><br>
+        タイプ！
+    </div>
+    """, unsafe_allow_html=True)
 
-    👉 この2セクションで輝けるタイプです！
-    """)
+    # 説明ボックス
+    st.markdown(f"""
+    <div style="
+        background: #f5f5f5;
+        padding:20px;
+        border-radius:15px;
+        margin-top:20px;
+        line-height:1.8;
+    ">
+        <b>{top1}</b>：{descriptions[top1]}<br><br>
+        <b>{top2}</b>：{descriptions[top2]}<br><br>
+
+        👉 この2セクションで輝けるタイプです！
+    </div>
+    """, unsafe_allow_html=True)
 
     if st.button("もう一度診断する"):
         st.session_state.q_index = 0
