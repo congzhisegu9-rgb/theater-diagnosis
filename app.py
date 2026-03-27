@@ -65,8 +65,8 @@ def set_bg(image_file):
 
         color: black !important;
         font-size: 16px;
-        text-align: left;
-        padding-left: 20px;
+        text-align: center;   /* ← 中央寄せ */
+        padding-left: 0;      /* ← 余白削除 */
 
         margin-top: 6px;
         margin-bottom: 6px;
