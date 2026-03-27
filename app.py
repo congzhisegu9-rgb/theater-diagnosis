@@ -9,6 +9,7 @@ def set_bg(image_file):
     st.markdown(f"""
     <style>
 
+    /* 余白リセット（←背景ズレ対策） */
     html, body, .stApp {{
         margin: 0;
         padding: 0;
@@ -18,13 +19,17 @@ def set_bg(image_file):
     .stApp {{
         background-image: url("data:image/png;base64,{img}");
         background-size: cover;
-        background-position: center;
+        background-position: center center;
+        background-repeat: no-repeat;
         background-attachment: fixed;
     }}
 
+    /* 暗いオーバーレイ */
     .stApp::before {{
         content: "";
         position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         background: rgba(0,0,0,0.4);
@@ -36,7 +41,7 @@ def set_bg(image_file):
         max-width: 700px;
         margin: 60px auto;
         padding: 40px;
-        background: rgba(255,255,255,0.85);
+        background: rgba(255,255,255,0.88);
         backdrop-filter: blur(10px);
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -46,16 +51,16 @@ def set_bg(image_file):
         visibility: hidden;
     }}
 
-    /* ボタン全体 */
+    /* ボタンラッパー */
     div.stButton {{
         width: 100%;
     }}
 
-    /* ボタン本体（横いっぱい） */
+    /* ボタン本体（左右に余白を残して広げる） */
     div.stButton > button {{
-        width: calc(100% + 80px) !important;
-        margin-left: -40px;
-        margin-right: -40px;
+        width: calc(100% - 20px) !important;  /* ← 少し余白 */
+        margin-left: 10px;                   /* ← 左余白 */
+        margin-right: 10px;                  /* ← 右余白 */
 
         height: 55px;
         background: transparent !important;
@@ -65,12 +70,13 @@ def set_bg(image_file):
         color: black !important;
         font-size: 16px;
         text-align: left;
-        padding-left: 20px;
+        padding-left: 15px;
 
         margin-top: 6px;
         margin-bottom: 6px;
 
         transition: 0.2s;
+        border-radius: 10px;
     }}
 
     /* ホバー */
@@ -80,9 +86,8 @@ def set_bg(image_file):
 
     /* 選択状態 */
     div.stButton.selected > button {{
-        background: rgba(100,150,255,0.6) !important;
+        background: rgba(100,150,255,0.65) !important;
         color: white !important;
-        border-radius: 8px;
     }}
 
     </style>
@@ -183,7 +188,7 @@ else:
     st.markdown(f"### {top1} & {top2} タイプ！")
 
     st.markdown(f"""
-    <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:15px;">
+    <div style="background:rgba(255,255,255,0.75); padding:20px; border-radius:15px;">
     <b>{top1}</b>：{descriptions[top1]}<br><br>
     <b>{top2}</b>：{descriptions[top2]}
     </div>
