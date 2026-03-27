@@ -22,7 +22,7 @@ def get_base64(file_path):
 
 img = get_base64("prism-logo.jpg")
 
-# ===== CSS（ここが重要）=====
+# ===== CSS =====
 st.markdown(f"""
 <style>
 
@@ -41,6 +41,7 @@ st.markdown(f"""
     z-index: -1;
 }}
 
+/* フェードイン */
 @keyframes fadeIn {{
     from {{
         opacity: 0;
@@ -52,6 +53,19 @@ st.markdown(f"""
     }}
 }}
 
+/* スライドイン（質問切り替え） */
+@keyframes slideIn {{
+    from {{
+        opacity: 0;
+        transform: translateX(40px);
+    }}
+    to {{
+        opacity: 1;
+        transform: translateX(0);
+    }}
+}}
+
+/* タイトルカード */
 .card {{
     background: rgba(255,255,255,0.9);
     padding: 30px;
@@ -60,29 +74,42 @@ st.markdown(f"""
     margin: 30px auto;
     box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     animation: fadeIn 0.6s ease;
-}}
-
-.card h1, .card h2, .card h3 {{
-    color: black;
     text-align: center;
 }}
 
+/* 質問カード（radioごと包む） */
+div[data-testid="stRadio"] {{
+    background: rgba(255,255,255,0.92);
+    padding: 25px;
+    border-radius: 20px;
+    max-width: 700px;
+    margin: 20px auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    animation: slideIn 0.4s ease;
+}}
+
+/* ラベル */
 div[data-testid="stRadio"] label {{
     color: black !important;
     padding: 10px;
+    border-radius: 10px;
     transition: 0.2s;
 }}
 
 div[data-testid="stRadio"] label:hover {{
     background: rgba(0,0,0,0.1);
-    border-radius: 10px;
 }}
 
-button {{
+/* ボタン */
+div.stButton > button {{
+    width: 700px;
+    display: block;
+    margin: 10px auto;
+    border-radius: 12px;
     transition: 0.2s;
 }}
 
-button:hover {{
+div.stButton > button:hover {{
     transform: scale(1.05);
 }}
 
@@ -113,50 +140,55 @@ QUESTIONS = [
 
 # ===== ローディング =====
 if not st.session_state.started:
-
     st.markdown('<div class="card"><h2>Loading...</h2></div>', unsafe_allow_html=True)
 
     bar = st.progress(0)
-
     for i in range(101):
-        time.sleep(0.015)
+        time.sleep(0.01)
         bar.progress(i)
 
     st.session_state.started = True
     st.rerun()
 
-# ===== タイトル（カード①）=====
+# ===== タイトル =====
 st.markdown("""
 <div class="card">
 <h1>🎭 セクション適性診断</h1>
 </div>
 """, unsafe_allow_html=True)
 
-# ===== 質問（カード②：確実に包む）=====
+# ===== 進捗バー =====
+progress = st.session_state.q_index / len(QUESTIONS)
+st.progress(progress)
+
+# ===== 質問 =====
 if st.session_state.q_index < len(QUESTIONS):
 
     q = QUESTIONS[st.session_state.q_index]
 
-    # 👇 containerで完全に囲う
-    with st.container():
-        st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="card">
+    <h3>Q{st.session_state.q_index+1}. {q['question']}</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.markdown(f"<h3>Q{st.session_state.q_index+1}. {q['question']}</h3>", unsafe_allow_html=True)
+    choice = st.radio(
+        "",
+        [c["text"] for c in q["choices"]],
+        key=st.session_state.q_index
+    )
 
-        choice = st.radio("", [c["text"] for c in q["choices"]])
+    # 自動遷移（UX改善）
+    if choice:
+        time.sleep(0.2)
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        for c in q["choices"]:
+            if c["text"] == choice:
+                for sec, pt in c["scores"].items():
+                    st.session_state.scores[sec] += pt
 
-        if st.button("次へ", use_container_width=True):
-            for c in q["choices"]:
-                if c["text"] == choice:
-                    for sec, pt in c["scores"].items():
-                        st.session_state.scores[sec] += pt
-
-            st.session_state.q_index += 1
-            st.rerun()
-
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.session_state.q_index += 1
+        st.rerun()
 
 # ===== 結果 =====
 else:
@@ -172,8 +204,10 @@ else:
     st.markdown(f"""
     <div class="card">
     <h2>
-    あなたが向いているのは…<br><br>
-    <b>{top1}</b> セクション、<b>{top2}</b> セクション
+    あなたに向いているのは…<br><br>
+    <b>{top1}</b> セクション<br>
+    ＆<br>
+    <b>{top2}</b> セクション！
     </h2>
     </div>
     """, unsafe_allow_html=True)
