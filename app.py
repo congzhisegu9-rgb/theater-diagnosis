@@ -200,13 +200,8 @@ def set_bg(image_file):
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-
-        margin-top: 80px;   /* ← これ追加 */
-    }
-
-    .choice-wrapper .stButton {
-        width: 70%;
+        justify-content: center;   /* ← これ追加 */
+        height: 60vh;              /* ← これ追加（超重要） */
     }
 
     /* ===== ボタン（超デカ文字） ===== */
