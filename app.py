@@ -264,10 +264,10 @@ def set_bg(image_file):
     }}
 
     /* ===== 進捗 ===== */
-    .stProgress > div > div {
+    .stProgress > div > div {{
     background: linear-gradient(90deg, #6c8cff, #9db3ff);
     border-radius: 10px;
-}
+}}
 
     </style>
     """, unsafe_allow_html=True)
