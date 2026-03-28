@@ -381,10 +381,12 @@ if q_index < len(questions):
 
     col1, col2, col3 = st.columns([1,2,1])
 
-    with col2:
-        st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
-    
-     for choice, secs in choices.items():
+    col1, col2, col3 = st.columns([1,2,1])
+
+with col2:
+    st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
+
+    for choice, secs in choices.items():
 
         selected_class = ""
         if st.session_state.selected.get(q_index) == choice:
@@ -406,7 +408,6 @@ if q_index < len(questions):
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
-
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
