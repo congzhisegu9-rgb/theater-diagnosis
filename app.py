@@ -55,7 +55,12 @@ def set_bg(image_file):
         background: rgba(0,0,0,0.45);
         z-index: -1;
     }}
-
+　　.loading-text {{
+        margin-top: 25px;
+        color: white;
+        font-size: 48px;  /* 文字サイズを大きくする */
+        letter-spacing: 0.2em;
+    }}
     /* ===== 正三角形 ===== */
     .triangle-svg {{
         width: 180px;
