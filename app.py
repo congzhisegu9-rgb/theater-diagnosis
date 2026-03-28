@@ -197,12 +197,12 @@ def set_bg(image_file):
 
     /* ===== 中央寄せ ===== */
     .choice-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 60vh;
-}
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 60vh;
+    }
 
     /* ===== ボタン（超デカ文字） ===== */
     div.stButton {{
