@@ -429,6 +429,7 @@ if q_index < len(questions):
                 for sec in secs:
                     st.session_state.scores[sec] += 1
 
+                time.sleep(0.2)
                 st.session_state.q_index += 1
                 st.rerun()
 
