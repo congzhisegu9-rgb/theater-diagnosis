@@ -198,7 +198,20 @@ def set_bg(image_file):
         line-height: 1.1;
     }}
 
+    .fade {{
+    animation: fadeIn 0.4s ease;
+}}
 
+@keyframes fadeIn {{
+    from {{
+        opacity: 0;
+        transform: translateY(10px);
+    }}
+    to {{
+        opacity: 1;
+        transform: translateY(0);
+    }}
+}}
 
     /* ===== 中央寄せ ===== */
     .choice-wrapper {{
