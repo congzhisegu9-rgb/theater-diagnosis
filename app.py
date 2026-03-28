@@ -5,7 +5,8 @@ import time
 # ---------- 初回ローディング ----------
 if "loading" not in st.session_state:
     st.session_state.loading = True
-
+if "result_loading" not in st.session_state:
+    st.session_state.result_loading = False
 # ---------- 背景 ----------
 def set_bg(image_file):
     with open(image_file, "rb") as f:
@@ -350,8 +351,24 @@ questions = [
 # ---------- UI ----------
 q_index = st.session_state.q_index
 
+# ===== 結果直前ローディング =====
+if q_index >= len(questions) and not st.session_state.result_loading:
+    st.session_state.result_loading = True
+
+    st.markdown("""
+    <div class="loading-screen">
+        <svg class="triangle-svg" viewBox="0 0 100 86.6">
+            <path d="M50 0 L100 86.6 L0 86.6 Z" />
+        </svg>
+        <div class="loading-text">Loading...</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    time.sleep(3.5)
+    st.rerun()
+
 st.markdown(f"""
-<div class="title">🎭 セクション適性診断</div>
+<div class="title">セクション適性診断</div>
 <div class="subtitle">{q_index+1} / {len(questions)} 問</div>
 """, unsafe_allow_html=True)
 
@@ -415,4 +432,5 @@ else:
         st.session_state.scores = {k:0 for k in sections}
         st.session_state.history = []
         st.session_state.selected = {}
+        st.session_state.result_loading = False
         st.rerun()
