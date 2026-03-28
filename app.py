@@ -111,7 +111,7 @@ if st.session_state.loading:
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
-        height: 100vh;
+        height: 100%;
 
         display: flex;
         justify-content: center;
