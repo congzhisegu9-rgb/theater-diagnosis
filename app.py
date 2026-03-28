@@ -381,33 +381,32 @@ if q_index < len(questions):
 
     col1, col2, col3 = st.columns([1,2,1])
 
-    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
 
-with col2:
-    st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
+        for choice, secs in choices.items():
 
-    for choice, secs in choices.items():
+            selected_class = ""
+            if st.session_state.selected.get(q_index) == choice:
+                selected_class = "selected"
 
-        selected_class = ""
-        if st.session_state.selected.get(q_index) == choice:
-            selected_class = "selected"
+            st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
 
-        st.markdown(f'<div class="stButton {selected_class}">', unsafe_allow_html=True)
+            if st.button(choice, key=f"{q_index}_{choice}"):
 
-        if st.button(choice, key=f"{q_index}_{choice}"):
+                st.session_state.selected[q_index] = choice
 
-            st.session_state.selected[q_index] = choice
+                st.session_state.history.append(secs)
+                for sec in secs:
+                    st.session_state.scores[sec] += 1
 
-            st.session_state.history.append(secs)
-            for sec in secs:
-                st.session_state.scores[sec] += 1
+                st.session_state.q_index += 1
+                st.rerun()
 
-            st.session_state.q_index += 1
-            st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
