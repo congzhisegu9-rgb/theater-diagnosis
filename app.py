@@ -183,6 +183,7 @@ def set_bg(image_file):
         line-height: 1.05;
     }}
 
+    
     .subtitle {{
         text-align: center;
         color: #888;
