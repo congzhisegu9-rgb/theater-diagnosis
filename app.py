@@ -178,21 +178,6 @@ def set_bg(image_file):
     font-size: 42px;
 }
 
-/* 👇ここに追加 */
-.fade {{
-    animation: fadeIn 0.4s ease;
-}}
-
-@keyframes fadeIn {{
-    from {{
-        opacity: 0;
-        transform: translateY(10px);
-    }}
-    to {{
-        opacity: 1;
-        transform: translateY(0);
-    }}
-}}
     .title {{
         text-align: center;
         font-size: 42px;
