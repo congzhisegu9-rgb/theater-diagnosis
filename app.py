@@ -379,6 +379,10 @@ if q_index < len(questions):
 
     st.markdown(f'<div class="question">Q{q_index+1}. {q}</div>', unsafe_allow_html=True)
 
+    col1, col2, col3 = st.columns([1,2,1])
+
+    with col2:
+        st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
     st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
 
     for choice, secs in choices.items():
