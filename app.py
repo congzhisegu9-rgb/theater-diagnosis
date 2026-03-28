@@ -32,7 +32,43 @@ def set_bg(image_file):
         background-position: center;
         background-repeat: no-repeat;
     }}
+    /* ダークモード時の文字色変更 */
+    html[data-theme="dark"] .stMarkdown {{
+        color: #e5e5e5;  /* ダークモード時は明るい文字色 */
+    }}
 
+    /* ライトモード時の文字色変更 */
+    html[data-theme="light"] .stMarkdown {{
+        color: #333333;  /* ライトモード時は暗い文字色 */
+    }}
+
+    /* Loading画面などの文字色 */
+    .loading-text {{
+        color: white;
+        font-size: 22px;
+        letter-spacing: 0.2em;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+# 背景画像をセット
+set_bg("prism-logo.png")
+
+# ---------- ローディング ----------
+if st.session_state.loading:
+    st.markdown("""
+    <div class="loading-screen">
+        <svg class="triangle-svg" viewBox="0 0 100 86.6">
+            <path d="M50 0 L100 86.6 L0 86.6 Z" />
+        </svg>
+        <div class="loading-text">劇工舎プリズム</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    time.sleep(3.5)
+
+    st.session_state.loading = False
+    st.rerun()
     /* ===== ローディング ===== */
     .loading-screen {{
         position: fixed;
