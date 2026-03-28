@@ -134,7 +134,7 @@ import streamlit as st
 import base64
 
 # ---------- 背景 ----------
-
+def set_bg(image_file):
     with open(image_file, "rb") as f:
         img = base64.b64encode(f.read()).decode()
 
@@ -240,7 +240,7 @@ div.stButton > button p {
 </style>
 """, unsafe_allow_html=True)
 
-set_bg("prism-logo.png")
+
 
 # ---------- 状態 ----------
 sections = ["舞台","音響","照明","映像","宣伝美術","衣装","小道具","制作","Web","役者"]
