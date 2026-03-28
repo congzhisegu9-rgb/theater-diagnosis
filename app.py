@@ -183,20 +183,20 @@ def set_bg(image_file):
         line-height: 1.05;
     }}
 
-    .fade {
+    .fade {{
         animation: fadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    }
+    }}
 
-    @keyframes fadeIn {
-        from {
+    @keyframes fadeIn {{
+        from {{
             opacity: 0;
             transform: translateY(20px);
-        }
-        to {
+        }}
+        to {{
             opacity: 1;
             transform: translateY(0);
-        }
-    }
+        }}
+    }}
 
     .subtitle {{
         text-align: center;
