@@ -199,13 +199,13 @@ def set_bg(image_file):
     }}
 
     .fade {{
-    animation: fadeIn 1.0s ease;
+    animation: fadeIn 0.7s ease;
 }}
 
 @keyframes fadeIn {{
     from {{
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }}
     to {{
         opacity: 1;
