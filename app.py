@@ -196,7 +196,7 @@ def set_bg(image_file):
     }}
 
     /* ===== 中央寄せ ===== */
-.choice-wrapper {
+    .choice-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
