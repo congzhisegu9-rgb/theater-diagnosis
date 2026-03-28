@@ -1,10 +1,11 @@
 import streamlit as st
-import base64
-import time
-
 st.set_page_config(
     page_title="セクション適性診断"
 )
+import base64
+import time
+
+
 
 # ---------- 初回ローディング ----------
 if "loading" not in st.session_state:
