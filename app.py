@@ -213,6 +213,7 @@ def set_bg(image_file):
     div.stButton {{
         margin: 0 !important;
         padding: 0 !important;
+        width: 100% !important;
     }}
 
     div.stButton > button {{
