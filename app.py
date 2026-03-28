@@ -407,7 +407,7 @@ with col2:
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+    
     if q_index > 0:
         if st.button("← 戻る"):
             last_secs = st.session_state.history.pop()
