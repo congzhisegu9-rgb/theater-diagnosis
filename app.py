@@ -120,7 +120,7 @@ if st.session_state.loading:
         <svg class="triangle-svg" viewBox="0 0 100 86.6">
             <path d="M50 0 L100 86.6 L0 86.6 Z" />
         </svg>
-        <div class="loading-text">Loading...</div>
+        <div class="loading-text">劇工舎プリズム</div>
     </div>
     """, unsafe_allow_html=True)
 
