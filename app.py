@@ -173,10 +173,7 @@ def set_bg(image_file):
 
     /* ===== タイトル ===== */
     /* ===== タイトル ===== */
-.title {
-    text-align: center;
-    font-size: 42px;
-}
+
 
     .title {{
         text-align: center;
