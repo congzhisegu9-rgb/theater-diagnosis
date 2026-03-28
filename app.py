@@ -199,7 +199,7 @@ def set_bg(image_file):
     }}
 
     .fade {{
-    animation: fadeIn 0.4s ease;
+    animation: fadeIn 1.0s ease;
 }}
 
 @keyframes fadeIn {{
