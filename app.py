@@ -370,11 +370,16 @@ if q_index >= len(questions) and not st.session_state.result_loading:
 
     time.sleep(3.5)
     st.rerun()
+if q_index < len(questions):
+    st.markdown(f"""
+    <div class="title">セクション適性診断</div>
+    <div class="subtitle">{q_index+1} / {len(questions)} 問</div>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <div class="title">セクション適性診断</div>
+    """, unsafe_allow_html=True)
 
-st.markdown(f"""
-<div class="title">セクション適性診断</div>
-<div class="subtitle">{q_index+1} / {len(questions)} 問</div>
-""", unsafe_allow_html=True)
 
 if q_index < len(questions):
     q, choices = questions[q_index]
