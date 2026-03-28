@@ -183,7 +183,21 @@ def set_bg(image_file):
         line-height: 1.05;
     }}
 
-    
+    .fade {{
+        animation: fadeIn 0.7s ease;
+    }}
+
+    @keyframes fadeIn {{
+        from {{
+            opacity: 0;
+            transform: translateY(20px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateY(0);
+        }}
+    }}
+
     .subtitle {{
         text-align: center;
         color: #888;
@@ -199,21 +213,7 @@ def set_bg(image_file):
         line-height: 1.1;
     }}
 
-    .fade {{
-    animation: fadeIn 0.7s ease;
-}}
-
-@keyframes fadeIn {{
-    from {{
-        opacity: 0;
-        transform: translateY(20px);
-    }}
-    to {{
-        opacity: 1;
-        transform: translateY(0);
-    }}
-}}
-
+    
     /* ===== 中央寄せ ===== */
     .choice-wrapper {{
     display: flex;
