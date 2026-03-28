@@ -383,9 +383,8 @@ if q_index < len(questions):
 
     with col2:
         st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
-    st.markdown('<div class="choice-wrapper">', unsafe_allow_html=True)
-
-    for choice, secs in choices.items():
+    
+     for choice, secs in choices.items():
 
         selected_class = ""
         if st.session_state.selected.get(q_index) == choice:
