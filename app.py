@@ -206,6 +206,7 @@ def set_bg(image_file):
 
 .choice-wrapper .stButton {{
     width: 100%;
+    margin-right: -30%;
 }}
 
 
