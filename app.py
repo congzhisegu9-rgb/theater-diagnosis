@@ -134,11 +134,11 @@ import streamlit as st
 import base64
 
 # ---------- 背景 ----------
-def set_bg(image_file):
+
     with open(image_file, "rb") as f:
         img = base64.b64encode(f.read()).decode()
 
-    st.markdown(f"""
+    st.markdown("""
 <style>
 
 /* ===== 中央カード全体 ===== */
