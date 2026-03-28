@@ -110,7 +110,7 @@ if st.session_state.loading:
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 100vw;
+        width: 100%;
         height: 100vh;
 
         display: flex;
