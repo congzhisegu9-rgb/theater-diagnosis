@@ -196,17 +196,17 @@ def set_bg(image_file):
     }}
 
     /* ===== 中央寄せ ===== */
-    .choice-wrapper {
+    .choice-wrapper {{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 60vh;
-}
+}}
 
-.choice-wrapper .stButton {
+.choice-wrapper .stButton {{
     width: 70%;
-}
+}}
 
 
     div.stButton {{
