@@ -32,6 +32,7 @@ def set_bg(image_file):
         background-position: center;
         background-repeat: no-repeat;
     }}
+
     /* ダークモード時の文字色変更 */
     html[data-theme="dark"] .stMarkdown {{
         color: #e5e5e5;  /* ダークモード時は明るい文字色 */
@@ -48,6 +49,40 @@ def set_bg(image_file):
         font-size: 22px;
         letter-spacing: 0.2em;
     }}
+
+    /* ===== ローディング画面 ===== */
+    .loading-screen {{
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 9999;
+    }}
+
+    .loading-screen::before {{
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.45);
+        z-index: -1;
+    }}
+
+    .loading-text {{
+        margin-top: 25px;
+        color: white;
+        font-size: 48px;  /* 文字サイズを大きくする */
+        letter-spacing: 0.2em;
+    }}
+
     </style>
     """, unsafe_allow_html=True)
 
