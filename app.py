@@ -195,16 +195,32 @@ def set_bg(image_file):
         line-height: 1.1;
     }}
 
-    /* ===== 中央寄せ ===== */
-    .choice-wrapper {{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }}
+    /* ===== 選択肢を完全中央揃え ===== */
+.choice-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-    .choice-wrapper .stButton {{
-        width: 70%;
-    }}
+/* Streamlitのボタンコンテナを中央寄せ */
+div.stButton {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* ボタン本体 */
+div.stButton > button {
+    width: 70%;
+    margin: 6px auto;
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
 
     /* ===== ボタン（超デカ文字） ===== */
     div.stButton {{
