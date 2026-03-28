@@ -139,148 +139,106 @@ def set_bg(image_file):
         img = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
-    <style>
+<style>
 
-    html, body, .stApp {{
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }}
+/* ===== 中央カード全体 ===== */
+.block-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 28px;
 
-    .stApp {{
-        background-image: url("data:image/png;base64,{img}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }}
+    background: rgba(255,255,255,0.92);
+    border-radius: 14px;
 
-    /* ===== 中央カード ===== */
-    .block-container {{
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 28px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    backdrop-filter: blur(6px);
+}
 
-        background: rgba(255,255,255,0.92);
-        border-radius: 14px;
+header, footer {
+    visibility: hidden;
+}
 
-        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-        backdrop-filter: blur(6px);
-    }}
+/* ===== タイトル ===== */
+.title {
+    text-align: center;
+    font-size: 42px;
+    font-weight: 700;
+}
 
-    header, footer {{
-        visibility: hidden;
-    }}
+.subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
 
-    /* ===== タイトル ===== */
-    .title {{
-        text-align: center;
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 2px;
-        line-height: 1.05;
-    }}
+/* ===== 質問 ===== */
+.question {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 600;
+    margin: 20px 0;
+}
 
-    .subtitle {{
-        text-align: center;
-        color: #888;
-        margin-bottom: 6px;
-        font-size: 14px;
-    }}
-
-    .question {{
-        text-align: center;
-        font-size: 30px;
-        font-weight: 600;
-        margin: 10px 0;
-        line-height: 1.1;
-    }}
-
-    /* ===== 選択肢を完全中央揃え ===== */
+/* ===== 選択肢エリア ===== */
 .choice-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: 14px;
 }
 
-/* Streamlitのボタンコンテナを中央寄せ */
+/* ===== カードボタン ===== */
 div.stButton {
+    width: 100%;
     display: flex;
     justify-content: center;
-    width: 100%;
 }
 
-/* ボタン本体 */
 div.stButton > button {
-    width: 70%;
-    margin: 6px auto;
+    width: 80%;
+    max-width: 420px;
+    padding: 18px 20px;
 
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
+    background: white !important;
+    border-radius: 16px !important;
+    border: 2px solid #eee !important;
 
-    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+    transition: all 0.2s ease;
 }
 
-    /* ===== ボタン（超デカ文字） ===== */
-    div.stButton {{
-        margin: 0 !important;
-        padding: 0 !important;
-    }}
+div.stButton > button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border: 2px solid #6c8cff !important;
+}
 
-    div.stButton > button {{
-        width: 100%;
-        height: 52px;  /* ← 少し戻して押しやすく */
+div.stButton > button:active {
+    transform: scale(0.98);
+}
 
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
+div.stButton.selected > button {
+    background: #6c8cff !important;
+    color: white !important;
+    border: none !important;
+}
 
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
+div.stButton > button p {
+    text-align: center;
+    margin: 0;
+}
 
-        font-size: 32px;   /* ← ここが最大強化ポイント */
-        font-weight: 800;  /* ← 超太字 */
-        color: #333;
+.stProgress > div > div {
+    background-color: #6c8cff;
+}
 
-        margin: 0 !important;
-        padding: 0 !important;
-
-        border-radius: 8px;
-
-        letter-spacing: 0.05em;
-        line-height: 1.0;
-
-        transition: all 0.12s ease;
-    }}
-
-    /* ホバー */
-    div.stButton > button:hover {{
-        background: rgba(0,0,0,0.06) !important;
-        transform: scale(1.02);
-    }}
-
-    div.stButton.selected > button {{
-        background: rgba(120,150,255,0.25) !important;
-    }}
-
-    /* テキスト中央 */
-    div.stButton > button p {{
-        width: 100%;
-        text-align: center !important;
-        margin: 0 !important;
-        line-height: 1.0 !important;
-    }}
-
-    /* ===== 進捗 ===== */
-    .stProgress > div > div {{
-        background-color: #6c8cff;
-    }}
-
-    </style>
-    """, unsafe_allow_html=True)
-
+</style>
+""", unsafe_allow_html=True)
 
 set_bg("prism-logo.png")
 
