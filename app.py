@@ -195,6 +195,8 @@ def set_bg(image_file):
         line-height: 1.1;
     }}
 
+
+
     /* ===== 中央寄せ ===== */
     .choice-wrapper {{
     display: flex;
@@ -262,9 +264,10 @@ def set_bg(image_file):
     }}
 
     /* ===== 進捗 ===== */
-    .stProgress > div > div {{
-        background-color: #6c8cff;
-    }}
+    .stProgress > div > div {
+    background: linear-gradient(90deg, #6c8cff, #9db3ff);
+    border-radius: 10px;
+}
 
     </style>
     """, unsafe_allow_html=True)
