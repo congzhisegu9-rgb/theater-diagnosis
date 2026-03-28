@@ -204,7 +204,7 @@ def set_bg(image_file):
         height: 60vh;
     }
 
-    /* ===== ボタン（超デカ文字） ===== */
+
     div.stButton {{
         margin: 0 !important;
         padding: 0 !important;
