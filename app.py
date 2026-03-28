@@ -251,9 +251,9 @@ def set_bg(image_file):
         transform: scale(1.02);
     }}
 /* クリックした瞬間 */
-div.stButton > button:active {
+div.stButton > button:active {{
     transform: scale(0.96);
-}
+}}
     div.stButton.selected > button {{
         background: rgba(120,150,255,0.25) !important;
     }}
