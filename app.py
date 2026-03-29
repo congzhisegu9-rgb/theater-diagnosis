@@ -178,6 +178,8 @@ def set_bg(image_file):
 
        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
        backdrop-filter: blur(6px);
+       color: #000 !important;
+
    }}
 
    header, footer {{
