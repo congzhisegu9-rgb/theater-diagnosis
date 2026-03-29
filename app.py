@@ -33,22 +33,7 @@ def set_bg(image_file):
         background-repeat: no-repeat;
     }}
 
-    /* ダークモード時の文字色変更 */
-    html[data-theme="dark"] .stMarkdown {{
-        color: #e5e5e5;  /* ダークモード時は明るい文字色 */
-    }}
-
-    /* ライトモード時の文字色変更 */
-    html[data-theme="light"] .stMarkdown {{
-        color: #333333;  /* ライトモード時は暗い文字色 */
-    }}
-
-    /* Loading画面などの文字色 */
-    .loading-text {{
-        color: white;
-        font-size: 22px;
-        letter-spacing: 0.2em;
-    }}
+   
 
     /* ===== ローディング画面 ===== */
     .loading-screen {{
