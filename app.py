@@ -90,22 +90,7 @@ if st.session_state.loading:
     st.session_state.loading = False
     st.rerun()
     /* ===== ローディング ===== */
-    .loading-screen {{
-        position: fixed;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100vw;
-        height: 100vh;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        z-index: 9999;
-    }}
-
+    
     .loading-screen::before {{
         content: "";
         position: fixed;
