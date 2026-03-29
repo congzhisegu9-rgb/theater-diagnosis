@@ -12,9 +12,9 @@ import time
 
 # ---------- 初回ローディング ----------
 if "loading" not in st.session_state:
-st.session_state.loading = True
+   st.session_state.loading = True
 if "result_loading" not in st.session_state:
-st.session_state.result_loading = False
+   st.session_state.result_loading = False
 # ---------- 背景 ----------
 def set_bg(image_file):
 with open(image_file, "rb") as f:
