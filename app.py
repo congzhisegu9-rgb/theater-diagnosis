@@ -192,7 +192,7 @@ def set_bg(image_file):
 
    .title {{
        text-align: center;
-       font-size: 42px;
+       font-size: 32px;
        font-weight: 700;
        margin-bottom: 2px;
        line-height: 1.05;
