@@ -458,8 +458,8 @@ if q_index < len(questions):
          for sec in last_secs:
             st.session_state.scores[sec] -= 1
 
-      st.session_state.q_index -= 1
-      st.rerun()
+         st.session_state.q_index -= 1
+         st.rerun()
 
    st.progress((q_index + 1) / len(questions))
 
