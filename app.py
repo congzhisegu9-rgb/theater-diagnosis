@@ -451,7 +451,7 @@ if q_index < len(questions):
 
    st.markdown('</div>', unsafe_allow_html=True)
 
-if q_index > 0:
+if q_index < len(questions):
    if st.button("← 戻る"):
       last_secs = st.session_state.history.pop()
       for sec in last_secs:
