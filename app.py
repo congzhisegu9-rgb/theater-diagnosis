@@ -91,22 +91,7 @@ if st.session_state.loading:
     st.rerun()
     /* ===== ローディング ===== */
     
-    .loading-screen::before {{
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0,0,0,0.45);
-        z-index: -1;
-    }}
-　　.loading-text {{
-        margin-top: 25px;
-        color: white;
-        font-size: 48px;  /* 文字サイズを大きくする */
-        letter-spacing: 0.2em;
-    }}
+    
     /* ===== 正三角形 ===== */
     .triangle-svg {{
         width: 180px;
